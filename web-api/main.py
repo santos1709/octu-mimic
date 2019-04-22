@@ -73,7 +73,6 @@ class SendData(Resource):
     def post(self):
         g.data_source.get_from_json(requester=self.__class__.__name__)
 
-        # import pg.db; pg.db.set_trace()
         # TODO: get_from_db create table/first element
         count = g.db.get_from_db('count', f'{g.data_source.user}.{g.data_source.device}', g.data_source.token)
         if not count['data']:
@@ -104,11 +103,12 @@ class SelectModel(Resource):
         # model.version = g.data_source.model_version
         # model.update_model()
 
-        response = {'new_model': {'model_name': model.name,
-                                  'model_version': model.version
-                                  }
-                    }
-        return jsonpify(response)
+        # response = {'new_model': {'model_name': model.name,
+        #                           'model_version': model.version
+        #                           }
+        #             }
+        # return jsonpify(response)
+        pass
 
 
 class ListModels(Resource):

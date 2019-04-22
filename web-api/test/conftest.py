@@ -58,3 +58,4 @@ def get_mocked_data_source(data_source):
     data_source.device = 'pytest_device'
 
     return data_source
+
