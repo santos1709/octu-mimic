@@ -122,4 +122,6 @@ test/temp_data/
 config.py
 
 #keras testing
-keras-anomaly-detection/g
+keras-anomaly-detection/*
+keras-anomaly-detection/
+
