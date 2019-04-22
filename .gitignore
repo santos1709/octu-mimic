@@ -120,3 +120,6 @@ test/temp_data/
 
 # Environment configurations
 config.py
+
+#keras testing
+keras-anomaly-detection/g
