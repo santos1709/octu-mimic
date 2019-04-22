@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7cd56fbe-0cfd-4148-b6a5-6cd7c5dec013" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/web-api/test/conftest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-api/test/main/test_get_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web-api/test/main/test_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2019-04-20_power_2b5e4927171b4872b590fe3dc00b070c.csv" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/data/2019-04-20_power_2b5e4927171b4872b590fe3dc00b070c.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/2019-04-20_power_a729c425b06048249730bf54f4c3e150.csv" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/data/2019-04-20_power_a729c425b06048249730bf54f4c3e150.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/db/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/db_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/db/db_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/db/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/conv1d_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/conv1d_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/data/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/data/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/data/creditcardfraud.zip" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/data/creditcardfraud.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/feed_forward_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/feed_forward_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/convolutional.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/convolutional.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/evaluation_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/evaluation_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/feedforward.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/feedforward.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/plot_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/plot_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/recurrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/recurrent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-history.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-history.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/con1d-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-history.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-history.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/models/feedforward-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/unzip_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/unzip_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/bidirectional_lstm_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/bidirectional_lstm_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/cnn_lstm_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/cnn_lstm_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/conv1d_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/conv1d_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/data/ecg_discord_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/data/ecg_discord_test.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/feed_forward_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/feed_forward_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/h2o_ecg_pulse_detection.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/h2o_ecg_pulse_detection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/convolutional.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/convolutional.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/evaluation_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/evaluation_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/feedforward.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/feedforward.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/plot_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/plot_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/recurrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/recurrent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/lstm_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/lstm_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/bidirectional-lstm-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/cnn-lstm-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/con1d-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/feedforward-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-architecture.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-architecture.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-config.npy" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-config.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/models/lstm-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/convolutional.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/convolutional.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/evaluation_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/evaluation_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/feedforward.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/feedforward.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/plot_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/plot_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection/library/recurrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/recurrent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/notebooks/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/notebooks/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/setup.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/setup.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keras-anomaly-detection/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/cnn-lstm-auto-encoder-weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/models/cnn-lstm-auto-encoder-weights.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/conftest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/keras-anomaly-detection/keras_anomaly_detection/library/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/test_generate_token.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/test/main/test_generate_token.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/test_get_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/test/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/test_list_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/test/main/test_list_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/test_select_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/test/main/test_select_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/test_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/web-api/test/main/__init__.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web-api/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1064">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web-api/test/conftest.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web-api/model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web-api/test/main/test_list_models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web-api/test/main/test_generate_token.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web-api/test/main/test_select_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="209">
+              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../trusted-transformation/test/transformation/dw/test_entity_aluno_transformation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../trusted-transformation/config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="28" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>chec</find>
+      <find>db</find>
+      <find>data_source</find>
+      <find>mock</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>g.db</replace>
+      <replace>g.data_source</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/../trusted-transformation/test/models</dir>
+      <dir>$PROJECT_DIR$/../trusted-transformation</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/db/db_repository.py" />
+        <option value="$PROJECT_DIR$/config.py" />
+        <option value="$USER_HOME$/anomaly-detection-with-keras/anomaly_withLSTM.py" />
+        <option value="$PROJECT_DIR$/case.py" />
+        <option value="$PROJECT_DIR$/demo/credit_card_demo/feed_forward_autoencoder.py" />
+        <option value="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo/conv1d_autoencoder.py" />
+        <option value="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo/conv1d_autoencoder.py" />
+        <option value="$PROJECT_DIR$/broker.py" />
+        <option value="$PROJECT_DIR$/model.py" />
+        <option value="$PROJECT_DIR$/data.py" />
+        <option value="$PROJECT_DIR$/test/test_main.py" />
+        <option value="$PROJECT_DIR$/test/main/test_get_data.py" />
+        <option value="$PROJECT_DIR$/test/main/test_train.py" />
+        <option value="$PROJECT_DIR$/test/config.py" />
+        <option value="$PROJECT_DIR$/test/config_test.py" />
+        <option value="$PROJECT_DIR$/test/__init__.py" />
+        <option value="$PROJECT_DIR$/test/main/test_list_models.py" />
+        <option value="$PROJECT_DIR$/test/main/test_select_model.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/test/main/test_generate_token.py" />
+        <option value="$PROJECT_DIR$/test/main/test_generate_token.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/test/conftest.py" />
+        <option value="$PROJECT_DIR$/db/database.py" />
+        <option value="$PROJECT_DIR$/web-api/db/database.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="530" />
+    <option name="y" value="27" />
+    <option name="width" value="1319" />
+    <option name="height" value="984" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="mimic" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mimic" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mimic" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mimic" type="462c0819:PsiDirectoryNode" />
+              <item name="web-api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mimic" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mindtitan_sampletask" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mimic" type="b2602c69:ProjectViewProjectNode" />
+              <item name="trusted-transformation" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../trusted-transformation" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web-api" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/keras-anomaly-detection/keras_anomaly_detection" />
+      <recent name="$PROJECT_DIR$/demo/credit_card_demo" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/models" />
+      <recent name="$PROJECT_DIR$/keras-anomaly-detection/demo/ecg_demo" />
+      <recent name="$PROJECT_DIR$/keras-anomaly-detection/demo/credit_card_demo" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7cd56fbe-0cfd-4148-b6a5-6cd7c5dec013" name="Default Changelist" comment="" />
+      <created>1554165639717</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1554165639717</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21488912" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32929516" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50105596" side_tool="true" weight="0.40528634" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49894404" visible="true" weight="0.28964758" />
+      <window_info anchor="bottom" id="Python Console" order="11" weight="0.32929516" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/demo/credit_card_demo/keras_anomaly_detection/library/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/demo/ecg_demo/data/ecg_discord_test.csv" />
+    <entry file="file://$PROJECT_DIR$/case.py" />
+    <entry file="file://$PROJECT_DIR$/demo/credit_card_demo/unzip_utils.py" />
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/setup.cfg">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1577" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anomaly-detection-with-keras/anomaly_withLSTM.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="32" column="29" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
+          <folding>
+            <element signature="e#24#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/credit_card_demo/feed_forward_autoencoder.py" />
+    <entry file="file://$PROJECT_DIR$/keras_anomaly_detection/demo/ecg_demo/data/ecg_discord_test.csv" />
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/demo/credit_card_demo/conv1d_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conv1d_autoencoder.py" />
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/keras_anomaly_detection/library/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/credit_card_demo/conv1d_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="53" column="38" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/data/ecg_discord_test.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/lstm_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/keras_anomaly_detection/library/convolutional.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../mindtitan_sampletask/models/train.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1291" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/broker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="29" column="30" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.py" />
+    <entry file="file://$PROJECT_DIR$/web-api/db/db_repository.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/data/2019-04-20_power_a729c425b06048249730bf54f4c3e150.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="7" selection-start-column="7" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/data/2019-04-20_power_2b5e4927171b4872b590fe3dc00b070c.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/keras-anomaly-detection/demo/ecg_demo/conv1d_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="23" selection-start-line="21" selection-start-column="23" selection-end-line="21" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/keras_anomaly_detection/library/convolutional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1273">
+          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/demo/ecg_demo/data/ecg_discord_test.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-33" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/keras-anomaly-detection/demo/ecg_demo/conv1d_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-224">
+          <caret line="3" column="63" selection-start-line="3" selection-start-column="63" selection-end-line="3" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../trusted-transformation/test/helper/data_helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_main.py" />
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/test_train.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../trusted-transformation/test/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/models/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/web-api/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="124" column="25" selection-start-line="124" selection-start-column="25" selection-end-line="124" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../trusted-transformation/test/transformation/dw/test_entity_aluno_transformation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../trusted-transformation/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="28" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../trusted-transformation/test/transformation/dw/test_entity_numero_fatura_semestral.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="76" column="74" lean-forward="true" selection-start-line="76" selection-start-column="74" selection-end-line="76" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/db/database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1007">
+          <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/test_get_data.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/test_generate_token.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/test_list_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/main/test_select_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1064">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-api/test/conftest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

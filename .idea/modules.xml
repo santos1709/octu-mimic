@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/keras-anomaly-detection/.idea/keras-anomaly-detection.iml" filepath="$USER_HOME$/keras-anomaly-detection/.idea/keras-anomaly-detection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../mimic/.idea/mimic.iml" filepath="$PROJECT_DIR$/../mimic/.idea/mimic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../mindtitan_sampletask/.idea/mindtitan_sampletask.iml" filepath="$PROJECT_DIR$/../mindtitan_sampletask/.idea/mindtitan_sampletask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../trusted-transformation/.idea/trusted-transformation.iml" filepath="$PROJECT_DIR$/../trusted-transformation/.idea/trusted-transformation.iml" />
+    </modules>
+  </component>
+</project>

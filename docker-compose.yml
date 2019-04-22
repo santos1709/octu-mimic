@@ -1,0 +1,50 @@
+version: '3.2'
+
+services:
+  watcher-service:
+    build: 
+      args:
+        - CALLCOUNT=${CALLCOUNT}
+      context: ./watcher
+    volumes:
+      - ./web-api/watcher:/usr/src/app
+    ports:
+      - 5100:8080
+
+  api-service-1:
+    build:
+       args:
+        - CALLCOUNT
+        - MODELNAME
+        - MODELVERSION
+       context: ./web-api
+
+    volumes:
+      - ./web-api:/usr/src/app
+    ports:
+      - 5001:8080
+
+  api-service-2:
+    build:
+       args:
+        - CALLCOUNT
+        - MODELNAME
+        - MODELVERSION
+       context: ./web-api
+
+    volumes:
+      - ./web-api:/usr/src/app
+    ports:
+      - 5002:8080
+  api-service-3:
+    build:
+       args:
+        - CALLCOUNT
+        - MODELNAME
+        - MODELVERSION
+       context: ./web-api
+
+    volumes:
+      - ./web-api:/usr/src/app
+    ports:
+      - 5003:8080

@@ -1,7 +1,4 @@
-import numpy as np
-import pandas as pd
 import psycopg2
-from flask_jsonpify import jsonpify
 from io import StringIO
 
 from db.db_repository import *
