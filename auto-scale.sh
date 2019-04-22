@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# var=$(uuid)
-# -v /home/guilherne/prjs/mindtitan_sampletask:/usr/src/app
-# docker run -p 500"$1":8080 --name prjs_api-service-"$1"${var::12} main_prj
-
 echo "  watcher-service:" > ././../docker-compose.yml
 echo "    build: ./watcher" >> ././../docker-compose.yml
 echo "    volumes:" >> ././../docker-compose.yml
