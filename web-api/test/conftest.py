@@ -5,7 +5,6 @@ from contextlib import contextmanager
 import mock
 import pytest
 from flask import appcontext_pushed, g
-from uuid import uuid4
 
 from main import create_app
 

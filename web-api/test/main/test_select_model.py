@@ -1,5 +1,6 @@
-import pytest
 import os
+
+import pytest
 
 ROTH_PATH = os.path.abspath('')
 

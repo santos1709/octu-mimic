@@ -1,7 +1,6 @@
-import pytest
 import os
+
 import mock
-import requests
 from flask import g
 
 ROTH_PATH = os.path.abspath('')

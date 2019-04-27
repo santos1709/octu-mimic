@@ -1,10 +1,12 @@
-from uuid import uuid4
-from db.database import Database
-import requests
 import os
+
+import requests
 from flask import Flask, request, g
 from flask_jsonpify import jsonpify
 from flask_restful import Resource, Api
+from uuid import uuid4
+
+from db.database import Database
 
 MAX_COUNT = 10
 
