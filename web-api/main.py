@@ -9,7 +9,7 @@ from flask_restful import Resource, Api
 MAX_COUNT = 10
 
 
-class Data:
+class DataSource:
     def __init__(self):
         self.key = ''
         self.value = ''
@@ -91,6 +91,7 @@ class SendData(Resource):
 
         table = f'{g.data_source.user}.{g.data_source.device}'
         g.db.update(table, token=g.data_source.token, count=count)
+
         with open(f'data/{g.data_source.timestamp}_{g.data_source.key}_{g.data_source.token}.csv', 'a+') as file:
             file.write(g.data_source.value)
             file.write(',')
@@ -151,5 +152,5 @@ if __name__ == '__main__':
     app = create_app()
     # model = Model()
     g.db = Database()
-    g.data_source = Data()
+    g.data_source = DataSource()
     app.run(host='0.0.0.0', port='8080')
