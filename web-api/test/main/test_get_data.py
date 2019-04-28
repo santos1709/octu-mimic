@@ -1,12 +1,13 @@
 import os
 
 import mock
+import pytest
 from flask import g
 
 ROTH_PATH = os.path.abspath('')
 
 
-class TestSendData:
+class TestGetData:
     @mock.patch('main.requests.put')
     def test_post(self, mocked_put, data_directory, client):
         sent_json = {}
