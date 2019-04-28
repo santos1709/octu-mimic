@@ -52,12 +52,13 @@ class DataSource(DataScanner):
 class GenerateToken(Resource):
     def put(self):
         g.data_source.get_from_json(requester=self.__class__.__name__)
-        token = str(uuid4())
+        full_token = str(uuid4())
+        token = full_token.split('-')[-1]
         table = f'{g.data_source.user}.{g.data_source.device}'
-        g.db.update(table, token=token.split('-')[-1])
-        g.db.update(table, token=token.split('-')[-1], count=0)
+        g.db.update(table, token=token)
+        g.db.update(table, token=token, count=0)
 
-        response = {'generated_token': token}
+        response = {'generated_token': full_token}
         return jsonpify(response)
 
 
