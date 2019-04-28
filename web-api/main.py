@@ -1,20 +1,17 @@
 import json
 import os
-from uuid import uuid4
-
-import requests
-from flask import Flask, request, g
-from flask_jsonpify import jsonpify
-from flask_restful import Resource, Api
-
-from db.database import Database
-from model import Model
-from data_scanner import DataScanner
 from contextlib import contextmanager
 
+import requests
+from flask import Flask, request
 from flask import appcontext_pushed, g
+from flask_jsonpify import jsonpify
+from flask_restful import Resource, Api
+from uuid import uuid4
 
-
+from data_scanner import DataScanner
+from db.database import Database
+from model import Model
 
 MAX_COUNT = 10
 
