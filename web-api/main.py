@@ -171,3 +171,4 @@ if __name__ == '__main__':
     # g.data_source = DataSource()
     with objects_set(app, DataSource(), Database(), Model()):
         app.run(host='0.0.0.0', port='8080')
+    # app.run(host='0.0.0.0', port='8080')
