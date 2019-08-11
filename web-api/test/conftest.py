@@ -54,7 +54,7 @@ def get_mocked_model(model):
 def get_mocked_db(db):
     db.update.return_value = True
     db.copy_to_db.return_value = True
-    db.get_from_db.return_value = {'data': [[1]]}
+    db.select.return_value = {'data': [[1]]}
 
     return db
 

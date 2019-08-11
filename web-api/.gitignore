@@ -125,3 +125,6 @@ config.py
 keras-anomaly-detection/*
 keras-anomaly-detection/
 
+#data files
+data/*
+

@@ -14,7 +14,7 @@ from data_scanner import DataScanner
 class Model(Conv1DAutoEncoder):
     def __init__(self):
         super().__init__()
-        self.train_data_size = 20
+        self.train_data_size = 10
         self.model_name = 'anomaly_model'
         self.extension = 'h5'
         self.models_dir = 'models'
@@ -59,23 +59,36 @@ class Model(Conv1DAutoEncoder):
         for idx, (is_anomaly, dist) in enumerate(anomaly_information):
             return {str(dist): ('abnormal' if is_anomaly else 'normal')}
 
-    def train_model(self):
-        data_storage = DataScanner()
+    def train_model(self, data_storage):
         pd_dataset = pd.DataFrame()
 
         data_files = data_storage.get_most_recents(self.train_data_size)
         for file in data_files:
-            pd_dataset = pd.concat([pd_dataset, pd.read_csv(file)])
+            pd_dataset = pd.concat([pd_dataset, pd.read_csv(file, header=None)])
 
-        data_storage.token = str(uuid4()).replace('-', '')
-        pd_dataset.to_csv(f'{data_storage.data_full_path}')
+        # TODO: Get rid of this
+        last_value = pd_dataset[0].tail(1)[0]
+        pd_dataset = pd_dataset.head(pd_dataset[0].count() - 1)
+
+        old_token = data_storage.token.split('-')[-1]
+        data_storage.partial_token = str(uuid4()).replace('-', '')  # TODO: Get rid of this
+        data_storage.update_full_path()
+        pd_dataset.to_csv(f'{data_storage.data_full_path}', header=None, index=False)
         np_dataset = self._fit_data(pd_dataset)
 
-        self.fit(np_dataset[:self.train_data_size, :],
-                 model_dir_path=self.model_path,
-                 estimated_negative_sample_ratio=0.9)
+        # TODO: Uncomment this
+        # self.fit(np_dataset[:self.train_data_size, :],
+        #          model_dir_path=self.model_path,
+        #          estimated_negative_sample_ratio=0.9)
 
         for file in data_files:
             os.unlink(file)
+
+        # TODO: Get rid of this
+        data_storage.partial_token = old_token
+        data_storage.update_full_path()
+        with open(f'{data_storage.data_full_path}', 'a+') as file:
+            file.write(str(last_value))
+            file.write(',')
 
         return self.model
