@@ -1,5 +1,7 @@
-import psycopg2
 from io import StringIO
+
+import pandas as pd
+import psycopg2
 
 from db.db_repository import *
 
@@ -46,11 +48,25 @@ class Database:
 
         self.update(table, 'token', new_token, 'token', old_token)
 
-    def update(self, table, column, value, where_col, where_val):
+    def update(self, table, column, value, where_col, where_val, *args):
         conn = self.conn
+
+        def break_list(lst):
+            for idx, el in enumerate(lst):
+                yield (el, None) if idx % 2 == 0 else (None, f"'{el}'")
+
+        if len(args) == 0:
+            args = ''
+        else:
+            cols = [even[0] for even in break_list(args) if even[0]]
+            vals = [odd[1] for odd in break_list(args) if odd[1]]
+            args = list(zip(cols, vals))
+            args = 'AND ' + ' AND '.join(list(map(lambda x: ' = '.join(x), args)))
+
         query = f""" UPDATE {table}
                      SET {column} = '{value}'
-                     WHERE {where_col} = '{where_val}' """
+                     WHERE {where_col} = '{where_val}' 
+                     {args} """
 
         with conn.cursor() as c:
             c.execute(query)
@@ -66,3 +82,9 @@ class Database:
         with conn.cursor() as c:
             c.execute(query)
             conn.commit()
+
+    def persist_on_db(self, df, table_name, if_exists='append'):
+        df.to_sql(table_name, self.engine , index=False, if_exists=if_exists)
+
+    def read_db(self, table_name):
+        return pd.read_sql_table(table_name, self.engine)

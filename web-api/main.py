@@ -1,23 +1,26 @@
 import json
 import os
 from contextlib import contextmanager
+from uuid import uuid4
 
 import requests
 from flask import Flask, request
 from flask import appcontext_pushed, g
 from flask_jsonpify import jsonpify
 from flask_restful import Resource, Api
-from uuid import uuid4
+from keras import backend as K
 
 from data_scanner import DataScanner
 from db.database import Database
 from model import Model
+import config
 
 MAX_COUNT = 10
 
 
 class DataSource(DataScanner):
     def __init__(self):
+        self.got_json = None
         super().__init__()
 
     def get_from_json(self, requester):
@@ -48,8 +51,9 @@ class DataSource(DataScanner):
             self.token = got_json['token']
             self.timestamp = got_json['timestamp']
 
-        self.update_path()
-        self.update_full_path()
+        self.generate_path()
+        self.generate_full_path()
+        self.got_json = got_json
 
 
 class GenerateToken(Resource):
@@ -62,8 +66,9 @@ class GenerateToken(Resource):
         token = full_token.split('-')[-1]
         table = f'{data_source.user}.{data_source.device}'
 
+        # TODO: Fix token
         # db.insert(table, values=[token, 0], columns=['token', 'count'])
-        db.update_token(table, full_token)
+        db.update_token(config.MODEL_TABLE, full_token)
         response = {'generated_token': full_token}
         return jsonpify(response)
 
@@ -71,10 +76,13 @@ class GenerateToken(Resource):
 class Train(Resource):
     def put(self):
         data_source = g.data_source
+        g.model.__init__(data_source)
         model = g.model
 
         data_source.get_from_json(requester=self.__class__.__name__)
-        model.train_model(data_source)
+
+        K.clear_session()
+        model.train_model()
         response = {'Training info': {'model': model.model_name,
                                       'version': model.version,
                                       'train data size': model.train_data_size,
@@ -86,33 +94,33 @@ class Train(Resource):
 class GetData(Resource):
     def post(self):
         data_source = g.data_source
-        db = g.db
-        model = g.model
         data_source.get_from_json(requester=self.__class__.__name__)
+        db = g.db
+        g.model.__init__(data_source)
+        model = g.model
 
-        # TODO: get_from_db create table/first element
-        count = db.select('count', f'{data_source.user}.{data_source.device}', 'token', data_source.token)
-        if not count['data']:
-            db.copy_to_db(f'{data_source.token}, 0', f'{data_source.user}.{data_source.device}')
+        count = db.select('count', config.MODEL_TABLE, 'token', data_source.token)
+        if not count['data']:  # TODO: encapsulate this
+            db.update(config.MODEL_TABLE, 'count', 0, 'usr', data_source.user,
+                      'device', data_source.device)
             count['data'][0] = [0]
 
         count = int(count['data'][0][0]) + 1
-        if count > MAX_COUNT:
+        if count > MAX_COUNT:  # TODO: encapsulate this
             json_data = {"user": f'{data_source.user}', "device": f'{data_source.device}'}
             res = requests.put("http://127.0.0.1:8880/token/generate",
                                json=json_data)
             data_source.token = json.loads(res.text)['generated_token']
             count = 0
 
-        if len(data_source.get_most_recents()) >= model.train_data_size:
+        if len(data_source.get_most_recents()) >= model.train_data_size:  # TODO: encapsulate this
             json_data = request.json
             requests.put("http://127.0.0.1:8880/model/train",
                          json=json_data)
 
-        table = f'{data_source.user}.{data_source.device}'
-        db.update(table, 'count', count, 'token', data_source.token)
+        db.update(config.MODEL_TABLE, 'count', count, 'token', data_source.token)
 
-        with open(f'{data_source.data_full_path}', 'a+') as file:
+        with open(f'{data_source.data_full_path}', 'a+') as file:  # TODO: encapsulate this
             file.write(data_source.value)
             file.write(',')
 
@@ -120,9 +128,10 @@ class GetData(Resource):
 class SelectModel(Resource):
     def post(self):
         data_source = g.data_source
+        data_source.get_from_json(requester=self.__class__.__name__)
+        g.model.__init__(data_source)
         model = g.model
 
-        data_source.get_from_json(requester=self.__class__.__name__)
         model.name = data_source.model_name
         model.version = data_source.model_version
         model.update_model()

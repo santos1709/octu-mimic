@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from uuid import uuid4
+
+import pandas as pd
 
 
 class DataScanner:
@@ -16,11 +19,21 @@ class DataScanner:
         self.data_path = ''
         self.data_full_path = ''
 
-    def update_path(self):
-        self.data_path = f'data/{self.user}/{self.device}'
+    def generate_path(self, user=None, device=None):
+        user = self.user if user is None else user
+        device = self.device if device is None else user
 
-    def update_full_path(self):
-        self.data_full_path = f'{self.data_path}/{self.timestamp}_{self.key}_{self.partial_token}.csv'
+        self.data_path = f'data/{user}/{device}'
+        return self.data_path
+
+    def generate_full_path(self, data_path=None, timestamp=None, key=None, token=None):
+        data_path = self.data_path if data_path is None else data_path
+        timestamp = self.timestamp if timestamp is None else timestamp
+        key = self.key if key is None else key
+        token = self.partial_token if token is None else token
+
+        self.data_full_path = f'{data_path}/{timestamp}_{key}_{token}.csv'
+        return self.data_full_path
 
     def iter_files(self):
         try:
@@ -55,3 +68,26 @@ class DataScanner:
                     continue
                 return top_size
         return top_size
+
+    def compile_data(self, data_size=None):
+        pd_dataset = pd.DataFrame()
+
+        data_files = self.get_most_recents(data_size)  # TODO: Validate this
+        for file in data_files:
+            pd_dataset = pd.concat([pd_dataset, pd.read_csv(file, header=None)])
+
+        pd_dataset = pd_dataset.drop(11, axis=1)
+        last_value = pd_dataset[0].tail(1)[0]
+        pd_dataset = pd_dataset.head(pd_dataset[0].count() - 1)
+
+        tmp_token = str(uuid4()).replace('-', '')
+        pd_dataset.to_csv(f'{self.generate_full_path(token=tmp_token)}', header=None, index=False)
+
+        for file in data_files:
+            os.unlink(file)
+
+        with open(f'{self.generate_full_path(token=self.token.split("-")[-1])}', 'a+') as file:
+            file.write(str(last_value))
+            file.write(',')
+
+        return pd_dataset

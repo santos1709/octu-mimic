@@ -128,3 +128,10 @@ keras-anomaly-detection/
 #data files
 data/*
 
+#models
+models/*
+
+#others
+*.sh
+*.pp
+*.te
