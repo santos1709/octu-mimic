@@ -1,0 +1,12 @@
+- name: "Setuping virtualenvwrapper"
+  shell: export WORKON_HOME=~/Envs && mkdir -p $WORKON_HOME
+
+- name: "Getting virtualenvwrapper.sh"
+  shell: find / -name virtualenvwrapper.sh
+  register: response
+
+- name: "Initializing virtual env"
+  shell: source {{ response.stdout }} && mkvirtualenv py3.7-env
+
+- name: "Exporting Ld libraries"
+  shell: export LD_LIBRARY_PATH={{ gcc_path }}/lib64
