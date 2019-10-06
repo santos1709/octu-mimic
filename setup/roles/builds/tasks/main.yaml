@@ -1,69 +1,78 @@
 # TODO: Regex the filenames
+##
 #  Build python3.7
 - debug:
-    msg: Building python3.7
+    msg: Building python>=3.7
 
-- name: "Extracting python src Python-3.7.4.tar.xz"
+- name: "Extracting python src {{ downloaded_py.dest }}"
   unarchive:
-    src: /tmp/src/Python-3.7.4.tar.xz
+    src: "{{ downloaded_py.dest }}"
     dest: /usr/src
+    list_files: True
+  register: extracted_py
 
 - name: "Configuring build"
   shell: ./configure --enable-optimizations
   args:
-    chdir: /usr/src/Python-3.7.4
+    chdir: "/usr/src/{{ extracted_py['files'][0] }}"
 
 - name: "Making build"
   shell: make altinstall -j
   args:
-    chdir: /usr/src/Python-3.7.4
+    chdir: "/usr/src/{{ extracted_py['files'][0] }}"
 
+##
 #  Build git
 - debug:
     msg: Building git
 
-- name: "Extracting git src v2.23.0.tar.gz"
+- name: "Extracting git src {{ downloaded_git.dest }}"
   unarchive:
-    src: /tmp/src/v2.23.0.tar.gz
+    src: "{{ downloaded_git.dest }}"
     dest: /usr/src
+    list_files: True
+  register: extracted_git
 
 - name: "Configuring build"
   shell: make configure && ./configure --prefix=/usr
   args:
-    chdir: /usr/src/v2.23.0
+    chdir: "/usr/src/{{ extracted_git['files'][0] }}"
  
 - name: "Making build"
   shell: make all doc info && make install install-doc install-html install-info
   args:
-    chdir: /usr/src/v2.23.0
+    chdir: "/usr/src/{{ extracted_git['files'][0] }}"
 
+##
 #  Build gcc
 - debug:
     msg: Building gcc
 
-- name: "Extracting gcc src gcc-9.1.0.tar.xz"
+- name: "Extracting gcc src {{ downloaded_gcc.dest }}"
   unarchive:
-    src: /tmp/src/gcc-9.1.0.tar.xz
+    src: "/tmp/src/{{ downloaded_gcc.dest }}"
     dest: /usr/src
+    list_files: True
+  register: extracted_gcc
 
 - name: "Download prerequisites"
   shell: ./contrib/download_prerequisites
   args:
-    chdir: /usr/src/gcc-9.1.0
+    chdir: "/usr/src/{{ extracted_gcc['files'][0] }}"
 
-- name: "Making building dir"
-  shell: mkdir builddir
-  args:
-    chdir: /usr/src/gcc-9.1.0
+- name: "Assuring building dir"
+  file:
+    path: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
+    state: directory
 
 - name: "Configuring build"
-  shell: ../gcc-4.6.2/configure --prefix=$HOME/GCC-4.6.2 --enable-languages=c,c++,fortran,go
+  shell: "../configure --prefix=$HOME/GCC-{{ gcc_version }} --enable-languages=c,c++,fortran,go"
   args:
-    chdir: /usr/src/gcc-9.1.0/builddir
+    chdir: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
 
-    # TODO: Get machine number of cores to set param -j of parallelism automatically
+# TODO: Get machine number of cores to set param -j of parallelism automatically
 - name: "Making build"
   shell: make -j && make install
   args:
-    chdir: /usr/src/gcc-9.1.0/builddir
+    chdir: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
 

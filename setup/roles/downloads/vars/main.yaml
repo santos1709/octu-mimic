@@ -1,0 +1,5 @@
+py_file: "python-{{ py_version }}"
+git_file: "git-{{ git_version }}"
+gcc_file: "gcc-{{ gcc_version }}"
+bzl_file: "bazel-{{ bzl_version }}"
+

@@ -1,0 +1,18 @@
+# tmp_dir: /tmp/src
+
+# py_version: 3.7.4
+
+# py_file: "python-{{ py_version }}"
+
+# git_version: 2.23.0 
+
+# git_file: "git-{{ git_version }}"
+
+# gcc_version: 9.1.0 
+
+# gcc_file: "gcc-{{ gcc_version }}"
+
+# bzl_vesion: 0.26.1
+
+# bzl_file: "bazel-{{ bzl_version }}"
+

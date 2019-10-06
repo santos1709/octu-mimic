@@ -1,0 +1,10 @@
+- name: "Finding myself"
+  #shell: find / -name octu-mimic 2> /dev/null
+  #shell: cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd 
+  shell: pwd
+  register: response
+
+- name: "Including user custom entries"
+  include_vars:
+    dir: "{{ response.stdout }}/config.d"
+
