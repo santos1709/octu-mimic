@@ -1,6 +1,11 @@
 ---
-- hosts: localhost
+- hosts: 192.168.122.167 
   become: true
-  roles:
-  - test_role
-  - tttt
+  roles: 
+    - role: initiate
+    - role: packages
+    - role: downloads
+      when: server
+    - role: builds
+      when: server
+    - role: environment

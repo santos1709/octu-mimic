@@ -1,10 +1,15 @@
-- name: "Finding myself"
+- name: Getting home_dir of octu-mimic repo
+  #find:
+  #  paths: /
+  #  patterns: 'octu-mimic'
+  #register: home_dir_found
+
   #shell: find / -name octu-mimic 2> /dev/null
   #shell: cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd 
   shell: pwd
-  register: response
+  register: home_dir_found
 
 - name: "Including user custom entries"
   include_vars:
-    dir: "{{ response.stdout }}/config.d"
+    dir: "/home/guilherme/prjs/octu-mimic/setup/config.d"
 
