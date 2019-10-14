@@ -1,14 +1,19 @@
-- name: "Instaling python3.7 dependecies"
+- name: "Preparing vars"
+  include_vars: "{{ install_type }}.yaml"
+
+- name: "Installing python3.7 {{ type_packages }}"
   apt:
     name: "{{ py3.7-packages }}"
 
 - name: "Installing git dependencies"
   apt:
-    name: "{{ git-packages }}"
+    name: "{{ git-deps }}"
+  when: server
 
 - name: "Installing bazel-tensorflow dependencies"
   apt:
-    name: "{{ tf-packages }}"
+    name: "{{ tf-deps }}"
+  when: server
 
 - name: "Installing general packages"
   apt:

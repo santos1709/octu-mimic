@@ -1,78 +1,103 @@
-# TODO: Regex the filenames
 ##
 #  Build python3.7
-- debug:
-    msg: Building python>=3.7
-
-- name: "Extracting python src {{ downloaded_py.dest }}"
+- name: "[py 3.7] Extracting python src {{ downloaded_py.dest }}"
   unarchive:
     src: "{{ downloaded_py.dest }}"
     dest: /usr/src
     list_files: True
   register: extracted_py
 
-- name: "Configuring build"
+- name: "[py 3.7] Configuring build"
   shell: ./configure --enable-optimizations
   args:
     chdir: "/usr/src/{{ extracted_py['files'][0] }}"
 
-- name: "Making build"
+- name: "[py 3.7] Making build"
   shell: make altinstall -j
   args:
     chdir: "/usr/src/{{ extracted_py['files'][0] }}"
 
 ##
 #  Build git
-- debug:
-    msg: Building git
-
-- name: "Extracting git src {{ downloaded_git.dest }}"
+- name: "[git] Extracting git src {{ downloaded_git.dest }}"
   unarchive:
     src: "{{ downloaded_git.dest }}"
     dest: /usr/src
     list_files: True
   register: extracted_git
 
-- name: "Configuring build"
+- name: "[git] Configuring build"
   shell: make configure && ./configure --prefix=/usr
   args:
     chdir: "/usr/src/{{ extracted_git['files'][0] }}"
  
-- name: "Making build"
+- name: "[git] Making build"
   shell: make all doc info && make install install-doc install-html install-info
   args:
     chdir: "/usr/src/{{ extracted_git['files'][0] }}"
+  notify: cloning-tensorflow-repo
 
 ##
 #  Build gcc
-- debug:
-    msg: Building gcc
-
-- name: "Extracting gcc src {{ downloaded_gcc.dest }}"
+- name: "[gcc] Extracting gcc src {{ downloaded_gcc.dest }}"
   unarchive:
     src: "/tmp/src/{{ downloaded_gcc.dest }}"
     dest: /usr/src
     list_files: True
   register: extracted_gcc
 
-- name: "Download prerequisites"
+- name: "[gcc] Download prerequisites"
   shell: ./contrib/download_prerequisites
   args:
     chdir: "/usr/src/{{ extracted_gcc['files'][0] }}"
 
-- name: "Assuring building dir"
+- name: "[gcc] Assuring building dir"
   file:
     path: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
     state: directory
 
-- name: "Configuring build"
+- name: "[gcc] Configuring build"
   shell: "../configure --prefix=$HOME/GCC-{{ gcc_version }} --enable-languages=c,c++,fortran,go"
   args:
     chdir: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
 
-# TODO: Get machine number of cores to set param -j of parallelism automatically
-- name: "Making build"
-  shell: make -j && make install
+- name: "[gcc] Making build"
+  shell: "make -j {{ ansible_facts['processor_cores'] }} && make install"
   args:
     chdir: "/usr/src/{{ extracted_gcc['files'][0] }}/builddir"
+
+##
+# Build TensorFlow
+- name: "[tf] Installing bazel"
+  shell: "./{{ downloaded_bazel }} --user"
+  args:
+    chdir: "{{ tmp_dir }}" 
+
+- name: "[tf] Configuring tensorflow build"
+  shell: ./configure
+  args:
+    chdir: /usr/src/tensorflow
+
+- name: "[tf] Making tensorflow build with bazel"
+  shell: bazel build --config=v2 //tensorflow/tools/pip_package:build_pip_package
+  args:
+    chdir: /usr/src/tensorflow
+
+- name: "[tf] Building pip package"
+  shell: ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /usr/src/tensorflow/tensorflow_pkg
+  args:
+    chdir: /usr/src/tensorflow
+
+- name: "[tf] Finding wheel pip file"
+  find:
+    paths: /usr/src/tensorflow/tensorflow_pkg
+    patterns: 'tensorflow.*.whl'
+    use_regex: yes
+  register: find_results
+
+- name: "[tf] Installing pip tensorflow"
+  pip:
+    name: "{{ find_results['files'][0]['path'] }}"
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_command: "{{ venv }}"
 

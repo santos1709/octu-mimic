@@ -1,39 +1,6 @@
-#  Build TensorFlow
-- debug:
-    msg: Building tensor-flow
-
-- name: installing-bazel
-  shell: ./bazel-0.26.1-installer-linux-x86_64.sh --user
-  args:
-    chdir: /tmp
-  notify:
-  - configuring-tensorflow-build
-
-- name: configuring-tensorflow-build"
-  shell: ./configure
-  args:
-    chdir: /usr/src/tensorflow
-  notify:
-  - making-tensorflow-build-with-bazel
-
-- name: making-tensorflow-build-with-bazel
-  shell: bazel build --config=v2 //tensorflow/tools/pip_package:build_pip_package
-  args:
-    chdir: /usr/src/tensorflow
-  notify:
-  - building-pip-package
-
-- name: building-pip-package
-  shell: ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /usr/src/tensorflow/tensorflow_pkg
-  args:
-    chdir: /usr/src/tensorflow
-  notify:
-  - installing-pip-tensorflow
-
-# TODO: Figure out compiled whl filename (version) 
-- name: installing-pip-tensorflow
-  pip:
-    name: /usr/src/tensorflow/tensorflow_pkg/tensorflow-v2.whl
-  virtualenv: /root/Envs
-  virtualenv_command: py3.7-env
+# Getting tensorflow
+- name: cloning-tensorflow-repo
+  git:
+    repo: https://github.com/tensorflow/tensorflow.git
+    dest: /usr/src
 

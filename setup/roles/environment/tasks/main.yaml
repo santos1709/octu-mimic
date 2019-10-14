@@ -1,12 +1,32 @@
-- name: "Setuping virtualenvwrapper"
-  shell: export WORKON_HOME=~/Envs && mkdir -p $WORKON_HOME
+- name: Setuping virtualenvwrapper
+  shell: "export WORKON_HOME={{ venv_dir }} && mkdir -p $WORKON_HOME"
 
-- name: "Getting virtualenvwrapper.sh"
-  shell: find / -name virtualenvwrapper.sh
+- name: Getting virtualenvwrapper.sh
+  find:
+    paths: /
+    patterns: virtualenvwrapper.sh
   register: response
 
-- name: "Initializing virtual env"
-  shell: source {{ response.stdout }} && mkvirtualenv py3.7-env
+- name: Initializing virtual env
+  shell: "source {{ response['files'][0]['path'] }} && mkvirtualenv {{ venv }}"
 
-- name: "Exporting Ld libraries"
-  shell: export LD_LIBRARY_PATH={{ gcc_path }}/lib64
+- name: Exporting Ld libraries
+  shell: "export LD_LIBRARY_PATH={{ gcc_path }}/lib64"
+
+- pip:
+    requirements: "{{ home_dir_found.files[0] }}/web-api/requirements.txt"
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_command: "{{ venv }}"
+
+- name: "Cloning repo"
+  git:
+    repo: https://github.com/santos1709/octu-mimic
+    dest: "{{ home_dir }}"
+  when: ansible_facts.hostname != 'localhost'
+
+- name: "Creating DB cluster on {{ db_dir }}"
+  shell: "initdb -D {{ db_dir }}"
+
+- name: "Initializing postgresql DB service"
+  shell: "pg_ctl start -o '-p {{ db_port }} -h {{ db_host }} -d {{ db_name }}' -l logfile"
+
