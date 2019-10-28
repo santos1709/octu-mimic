@@ -1,3 +1,4 @@
+---
 - name: "Preparing vars"
   include_vars: "{{ install_type }}.yaml"
 

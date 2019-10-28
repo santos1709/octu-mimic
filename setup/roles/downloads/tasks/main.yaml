@@ -1,3 +1,4 @@
+---
 - name: "Assuring {{ tmp_dir }} dir"
   file: 
     path: "{{ tmp_dir }}"

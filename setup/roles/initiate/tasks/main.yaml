@@ -1,8 +1,8 @@
+---
 - name: Getting home_dir of octu-mimic repo
   #find:
   #  paths: /
   #  patterns: 'octu-mimic'
-  #register: home_dir_found
 
   #shell: find / -name octu-mimic 2> /dev/null
   #shell: cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd 
