@@ -1,8 +1,8 @@
 ---
 - name: Setuping virtualenvwrapper
-  shell: "mkdir -p $WORKON_HOME"
-  environment:
-    WORKON_HOME: "{{ venv_dir }}"
+  file:
+    path: "{{ venv_dir }}"
+    state: directory
 
 - name: Getting virtualenvwrapper.sh
   find:
@@ -45,9 +45,26 @@
     virtualenv: "{{ venv_dir }}/{{ venv }}"
     virtualenv_command: /usr/share/virtualenvwrapper
 
+- name: Getting initdb
+  find:
+    paths: /usr
+    patterns: 'initdb'
+    recurse: yes
+  register: initdb
+
+- name: Setting postgresql home
+  set_fact: 
+    pg_bin_home: "{{ initdb['files'][-1]['path'].split('initdb')[0] }}"
+
 - name: "Creating DB cluster on {{ db_dir }}"
-  shell: "initdb -D {{ db_dir }}"
+  shell: "{{ pg_bin_home }}initdb -D {{ db_dir }}"
+  become: true
+  become_user: postgres
 
 - name: Initializing postgresql DB service
-  shell: "pg_ctl start -o '-p {{ db_port }} -h {{ db_host }} -d {{ db_name }}' -l logfile"
-
+  shell: "{{ pg_bin_home }}pg_ctl start -o '-p {{ db_port }} -h {{ db_host }} -d {{ db_name }}' -l logfile"
+  become: true
+  become_user: postgres
+  environment:
+    PGDATA: "{{ db_dir }}"
+  
