@@ -4,35 +4,35 @@
     path: "{{ tmp_dir }}"
     state: directory
 
-# python default url: https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tar.xz
 - name: "Downloading python3.7"
   get_url:
     url: "https://www.python.org/ftp/python/{{ py_version }}/Python-{{ py_version }}.tar.xz"
     dest: "{{ tmp_dir }}/"
     mode: '0775'
   register: downloaded_py
+  when: server or ansible_facts['distribution'] == "Fedora"
 
-# git default url: https://github.com/git/git/archive/v2.23.0.tar.gz
 - name: "Downloading git"
   get_url:
     url: "https://github.com/git/git/archive/v{{ git_version }}.tar.gz"
     dest: "{{ tmp_dir }}/"
     mode: '0775'
   register: downloaded_git
+  when: server
 
-# gcc default url: https://bigsearcher.com/mirrors/gcc/releases/gcc-9.1.0/gcc-9.1.0.tar.xz
 - name: "Downloading gcc"
   get_url:
     url: "https://bigsearcher.com/mirrors/gcc/releases/gcc-{{ gcc_version }}/gcc-{{ gcc_version }}.tar.xz"
     dest: "{{ tmp_dir }}/"
     mode: '0775'
   register: downloaded_gcc
+  when: server
 
-# bazel default url: https://github.com/bazelbuild/bazel/releases/download/0.26.1/bazel-0.26.1-installer-linux-x86_64.sh
 - name: "Downloading bazel"
   get_url:
     url: "https://github.com/bazelbuild/bazel/releases/download/{{ bzl_version }}/bazel-{{ bzl_version }}-installer-linux-x86_64.sh"
     dest: "{{ tmp_dir }}/"
     mode: '0775'
   register: downloaded_bazel
+  when: server
 

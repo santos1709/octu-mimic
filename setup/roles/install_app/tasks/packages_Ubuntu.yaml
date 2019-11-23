@@ -1,26 +1,26 @@
 ---
-- name: "Preparing vars"
-  include_vars: "{{ install_type }}.yaml"
+- name: Preparing vars
+  include_vars: "{{ ansible_facts['distribution']  }}_{{ install_type }}.yaml"
 
 - name: "Installing python3.7 {{ type_packages }}"
   apt:
     name: "{{ py37_packages }}"
 
-- name: "Installing git dependencies"
+- name: Installing git dependencies
   apt:
     name: "{{ git_deps }}"
   when: server
 
-- name: "Installing bazel-tensorflow dependencies"
+- name: Installing bazel-tensorflow dependencies
   apt:
     name: "{{ tf_deps }}"
   when: server
 
-- name: "Installing general packages"
+- name: Installing general packages
   apt:
     name: "{{ gen_packages }}"
 
-- name: "Installing postgresql"
+- name: Installing postgresql
   apt:
     name: "{{ postgres_packages }}"
 

@@ -1,0 +1,16 @@
+---
+- name: Initiating pre-installation
+  import_tasks: pre_install.yaml
+
+- name: Installing packages
+  include_tasks: "packages_{{ ansible_facts['distribution'] }}.yaml"
+
+- name: Downloading requirements
+  import_tasks: download_requirements.yaml
+
+- name: Building packages from sources
+  import_tasks: build_sources.yaml
+
+- name: Setting Environment
+  import_tasks: set_environment.yaml
+

@@ -2,25 +2,24 @@
 install_type: desk
 
 tmp_dir: /tmp/src
-
-py_version: 3.7.4
-
-git_version: 2.23.0 
-
-gcc_version: 9.1.0 
-
-bzl_version: 0.26.1
-
-venv_dir: /root/Envs
-
-venv: py3.7-env0
-
 home_dir: /root
 
+py_version: 3.7.4
+py_file: "python_{{ py_version }}"
+
+git_version: 2.23.0 
+git_file: "git_{{ git_version }}"
+
+gcc_version: 9.1.0 
+gcc_file: "gcc_{{ gcc_version }}"
+
+bzl_version: 0.26.1
+bzl_file: "bazel_{{ bzl_version }}"
+
+venv_dir: /root/Envs
+venv: py3.7-env0
+
 db_dir: /var/lib/postgresql/data
-
 db_port: 8080
-
 db_host: 127.0.0.3
-
 db_name: db

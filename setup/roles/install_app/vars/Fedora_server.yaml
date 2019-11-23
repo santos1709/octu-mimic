@@ -1,0 +1,41 @@
+---
+server: true
+
+# Package for building python3.7
+py37_packages:
+  - gcc 
+  - openssl-devel
+  - bzip2-devel
+  - libffi
+  - libffi-devel
+
+# Packages for building last version of git
+git_deps:
+  - curl-devel 
+  - expat-devel
+  - gettext-devel
+  - openssl-devel 
+  - zlib-devel
+  - perl-CPAN
+  - perl-devel
+
+# Packages for building tensorflow
+tf_deps:
+  - pkg-config
+  - zip
+  - g++
+  - unzip 
+
+# General purpose packages for the server
+gen_packages:
+  - wget
+  - vim
+  - nano
+  - virtualenvwrapper
+
+# Postgresql packages for the DB
+postgres_packages:
+  - postgresql
+  - postgresql-contrib
+  - postgresql-server-dev-10
+

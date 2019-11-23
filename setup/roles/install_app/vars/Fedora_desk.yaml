@@ -1,0 +1,25 @@
+---
+server: false
+
+# Packages for installing python3.7
+py37_packages:
+  - gcc 
+  - openssl-devel 
+  - bzip2-devel 
+  - libffi 
+  - libffi-devel
+
+# General purpose packages for the server
+gen_packages:
+  - vim
+  - wget
+  - nano
+  - git
+  - virtualenvwrapper
+
+# Postgresql packages for the DB
+postgres_packages:
+  - postgresql
+  - postgresql-contrib
+  - postgresql-server-dev-10
+

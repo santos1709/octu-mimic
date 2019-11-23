@@ -1,11 +1,6 @@
 ---
-- hosts: 192.168.122.167 
+- hosts: 192.168.122.66 
   become: true
   roles: 
-    - role: initiate
-    - role: packages
-    - role: downloads
-      when: server
-    - role: builds
-      when: server
-    - role: environment
+    - role: install_app
+ 

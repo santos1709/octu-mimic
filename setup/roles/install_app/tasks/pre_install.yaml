@@ -8,8 +8,10 @@
   #shell: cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd 
   shell: pwd
   register: home_dir_found
+  delegate_to: localhost
 
-- name: "Including user custom entries"
+- name: Including user custom entries
   include_vars:
-    dir: "/home/guilherme/prjs/octu-mimic/setup/config.d"
+    dir: "{{ home_dir_found.stdout_lines[0] }}/config.d"
+  delegate_to: localhost
 
