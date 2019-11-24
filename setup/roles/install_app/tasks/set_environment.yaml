@@ -1,70 +1,108 @@
 ---
-- name: Setuping virtualenvwrapper
-  file:
-    path: "{{ venv_dir }}"
-    state: directory
+- name: Setting python3.7 virtual environment
+  block:
+  - name: Setuping virtualenvwrapper
+    file:
+      path: "{{ venv_dir }}"
+      state: directory
 
-- name: Getting virtualenvwrapper.sh
-  find:
-    paths: /
-    patterns: 'virtualenvwrapper.sh'
-    recurse: yes
-  register: venv_res
-  environment:
-    WORKON_HOME: "{{ venv_dir }}"
+  - name: Getting virtualenvwrapper.sh
+    find:
+      paths: /
+      patterns: 'virtualenvwrapper.sh'
+      recurse: yes
+    register: venv_res
+    environment:
+      WORKON_HOME: "{{ venv_dir }}"
 
-- name: Getting python3.7 interpreter
-  find:
-    paths: /usr/bin
-    patterns: 'python3.7'
-    recurse: yes
-  register: py_res
+  - name: Exporting workon_home env var
+    template:
+      src: etc/workon_init.j2
+      dest: "/etc/profile.d/workon_init.sh"
+      owner: root
+      group: root
+      mode: '644'
 
-- debug:
-    msg: "{{ py_res }}"
+  - name: Getting python3.7 interpreter
+    shell: "which python3.7"
+    register: py_res
+    when: ansible_facts['distribution'] == "Ubuntu"
 
-- name: Initializing virtual env
-  shell: "source {{ venv_res['files'][0]['path'] }} && mkvirtualenv {{ venv }} -p {{ py_res['files'][-1]['path'] }}"
-  args:
-    executable: /bin/bash
-  environment:
-    WORKON_HOME: "{{ venv_dir }}"
+    #- name: Getting python3.7 interpreter
+    #   find:
+    #    paths: /usr/bin
+    #    patterns: 'python3.7'
+    #    recurse: yes
+    #  register: py_res
+    #  when: ansible_facts['distribution'] == "Fedora"
+
+  - name: Initializing virtual env
+    #shell: "source {{ venv_res['files'][0]['path'] }} && mkvirtualenv {{ venv }} -p {{ py_res['files'][-1]['path'] }}"
+    shell: "source {{ venv_res['files'][0]['path'] }} && mkvirtualenv {{ venv }} -p {{ py_res.stdout_lines[0] }}"
+    args:
+      executable: /bin/bash
+    environment:
+      WORKON_HOME: "{{ venv_dir }}"
 
 - name: Exporting Ld libraries
   shell: "export LD_LIBRARY_PATH={{ gcc_path }}/lib64"
   when: server
 
-- name: Cloning repo
-  git:
-    repo: https://github.com/santos1709/octu-mimic
-    dest: "{{ home_dir }}/octu-mimic"
-  when: ansible_facts.hostname != 'localhost'
+- name: Setting repository
+  block:
+  - name: Cloning repo
+    git:
+      repo: "{{ git_remote_repo }}"
+      dest: "{{ home_dir }}/octu-mimic"
+    when: ansible_facts.hostname != 'localhost'
 
-- pip:
-    requirements: "{{ home_dir }}/octu-mimic/web-api/requirements.txt"
-    virtualenv: "{{ venv_dir }}/{{ venv }}"
-    virtualenv_command: /usr/share/virtualenvwrapper
-
-- name: Getting initdb
-  find:
-    paths: /usr
-    patterns: 'initdb'
-    recurse: yes
-  register: initdb
-
-- name: Setting postgresql home
-  set_fact: 
-    pg_bin_home: "{{ initdb['files'][-1]['path'].split('initdb')[0] }}"
-
-- name: "Creating DB cluster on {{ db_dir }}"
-  shell: "{{ pg_bin_home }}initdb -D {{ db_dir }}"
-  become: true
-  become_user: postgres
-
-- name: Initializing postgresql DB service
-  shell: "{{ pg_bin_home }}pg_ctl start -o '-p {{ db_port }} -h {{ db_host }} -d {{ db_name }}' -l logfile"
-  become: true
-  become_user: postgres
-  environment:
-    PGDATA: "{{ db_dir }}"
+  - pip:
+      requirements: "{{ home_dir }}/octu-mimic/web-api/requirements.txt"
+      virtualenv: "{{ venv_dir }}/{{ venv }}"
+      virtualenv_command: /usr/share/virtualenvwrapper
   
+  - name: Exporting config.py information
+    template:
+      src: etc/config.j2
+      dest: "{{ home_dir }}/octu-mimic/web-api/config.py"
+      owner: root
+      group: root
+      mode: '664'
+
+- name: Setting DB
+  block:
+  - name: Getting initdb
+    find:
+      paths: /usr
+      patterns: 'initdb'
+      recurse: yes
+    register: initdb
+
+  - name: Setting postgresql home
+    set_fact: 
+      pg_bin_home: "{{ initdb['files'][-1]['path'].split('initdb')[0] }}"
+
+  - block:
+    - name: "Creating DB cluster on {{ db_dir }}"
+      shell: "{{ pg_bin_home }}initdb -D {{ db_dir }}"
+      become: true
+      become_user: postgres
+      register: initdb_response
+    rescue:
+      - debug:
+          msg: DB Already created and initialized
+        when: "'exists but is not empty' in initdb_response.stderr"
+
+  - block:
+    - name: Initializing postgresql DB service
+      shell: "{{ pg_bin_home }}pg_ctl start -o '-p {{ db_port }} -h {{ db_hostname }} -d {{ db_name }}' -l logfile"
+      become: true
+      become_user: postgres
+      environment:
+        PGDATA: "{{ db_dir }}"
+      register: psql_response
+    rescue:
+      - debug:
+          msg: DB Already started
+        when: "'another server might be running' in psql_response.stderr"
+
