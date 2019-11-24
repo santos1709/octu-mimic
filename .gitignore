@@ -32,3 +32,8 @@ derby.log
 
 # Test output data
 test/temp_data/
+
+# ansible tests
+setup/test*
+setup/roles/test*
+

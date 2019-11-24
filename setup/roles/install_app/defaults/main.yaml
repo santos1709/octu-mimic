@@ -9,6 +9,7 @@ py_file: "python_{{ py_version }}"
 
 git_version: 2.23.0 
 git_file: "git_{{ git_version }}"
+git_remote_repo: https://github.com/santos1709/octu-mimic
 
 gcc_version: 9.1.0 
 gcc_file: "gcc_{{ gcc_version }}"
@@ -20,6 +21,8 @@ venv_dir: /root/Envs
 venv: py3.7-env0
 
 db_dir: /var/lib/postgresql/data
+db_name: postgres
 db_port: 8080
-db_host: 127.0.0.3
-db_name: db
+db_user: postgres
+db_pass: 
+db_hostname: 127.0.0.3
