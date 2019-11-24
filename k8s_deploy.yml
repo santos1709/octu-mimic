@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: octu
+    tier: backend
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: octu
+    tier: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: octu 
+        tier: backend
+    spec:
+      containers:
+      - name: main
+        image: octu  
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  labels:
+    app: broker
+    tier: backend
+spec:
+  ports:
+  - port: 6380
+  selector:
+    app: broker
+    tier: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: broker
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: broker
+        tier: backend
+    spec:
+      containers:
+      - name: slave
+        image: eclipse-mosquitto:latest
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 6380
+
+      - name: octu-mqtt
+        image: mimic
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        ports:
+         - containerPort: 6381
+
+       #env:
+       # - name: GET_HOSTS_FROM
+       #   value: dns
+          # If your cluster config does not include a dns service, then to
+          # instead access an environment variable to find the master
+          # service's host, comment out the 'value: dns' line above, and
+          # uncomment the line below:
+          # value: env
+        
