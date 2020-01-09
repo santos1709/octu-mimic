@@ -51,7 +51,7 @@ class Train(Resource):
         data_source.get_from_json(requester=self.__class__.__name__)
 
         model = g.model
-        if data_source.new_model != "":
+        if data_source.new_model == "yes":
             new_model = True
         else:
             new_model = False
