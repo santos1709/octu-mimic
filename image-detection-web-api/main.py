@@ -52,12 +52,13 @@ class Train(Resource):
 
         model = g.model
         if data_source.new_model != "":
-            user = data_source.user
+            new_model = True
         else:
-            user = None
+            new_model = False
         model.train_model(
             data_dir=os.path.join(config.UNTRAINED_IMAGES_PATH, data_source.last_untrained),
-            user=user
+            user=data_source.user,
+            new_model=new_model
         )
 
         response = {

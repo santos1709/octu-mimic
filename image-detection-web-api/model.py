@@ -107,10 +107,10 @@ class Model():
             where_val=user
         )
 
-    def train_model(self, data_dir, user=None):
+    def train_model(self, data_dir, user, new_model=False):
         # TODO: Test
         # https://towardsdatascience.com/train-image-recognition-ai-with-5-lines-of-code-8ed0bdd8d9ba
-        if user:
+        if new_model:
             model_trainer = self.load_model(user=user)
         else:
             model_trainer = ModelTraining()
