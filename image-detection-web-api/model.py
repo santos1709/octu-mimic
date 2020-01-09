@@ -111,10 +111,10 @@ class Model():
         # TODO: Test
         # https://towardsdatascience.com/train-image-recognition-ai-with-5-lines-of-code-8ed0bdd8d9ba
         if new_model:
-            model_trainer = self.load_model(user=user)
-        else:
             model_trainer = ModelTraining()
             model_trainer.setModelTypeAsResNet()
+        else:
+            model_trainer = self.load_model(user=user)
 
         model_trainer.setDataDirectory(data_dir)
         model_trainer.trainModel(
