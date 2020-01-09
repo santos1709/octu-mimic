@@ -40,7 +40,6 @@ class DataSource(DataScanner):
             self.user = got_json['user']
             self.device_name = got_json['device_name']
             self.last_untrained = got_json['last_untrained']
-            self.pic = got_json['pic']
             self.new_model = got_json['new_model']
 
         self.got_json = got_json
