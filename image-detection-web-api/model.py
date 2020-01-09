@@ -76,7 +76,7 @@ class Model():
             db = Database()
             models_df = db.read_db('models')
             models_df.where(cond=models_df.usr == user, inplace=True)
-            model = models_df.version.to_list()[0]
+            model = models_df.version.tolist()[0]
 
         self.user = user
         self.version = model.split('_')[0]
