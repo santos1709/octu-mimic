@@ -111,7 +111,7 @@ class Evaluate(Resource):
         model = g.model
         file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
 
-        res, last_untrained = model.detect(file_path)
+        res, last_untrained = model.detect(user=data_source.user, picture_name=file_path)
 
         json_data = {
             'user': data_source.user,
