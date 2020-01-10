@@ -43,14 +43,14 @@ class Model():
             table='models',
             column='name',
             value=name,
-            where_col='user',
+            where_col='usr',
             where_val=user
         )
         db.update(
             table='models',
             column='version',
             value=version,
-            where_col='user',
+            where_col='usr',
             where_val=user
         )
 
