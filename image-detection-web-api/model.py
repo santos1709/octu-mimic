@@ -54,6 +54,8 @@ class Model():
             where_val=user
         )
 
+        self.get_model_info(user)
+
     def load_model(self, user, model_filename=None, update_db=False):
         if model_filename:
             name = model_filename.split('_')[1]
