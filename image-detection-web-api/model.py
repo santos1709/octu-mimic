@@ -74,16 +74,16 @@ class Model():
         return model
 
     def get_model_info(self, user, model=None):
-        if not model:
+        self.user = user
+        if model:
+            self.version = model.split('_')[0]
+            self.model_name = model.split('_')[1]
+        else:
             db = Database()
             models_df = db.read_db('models')
             models_df.where(cond=models_df.usr == user, inplace=True)
-            model = models_df.version.tolist()[0]
-
-        self.user = user
-        self.version = model.split('_')[0]
-        self.model_name = model.split('_')[1]
-        # self.model_id = model.split('-')[2] # TODO: Evaluate if necessary
+            self.version = models_df.version.tolist()[0]
+            self.model_name = models_df.name.tolist()[0]
 
     def generate_model_id(self, user):
         db = Database()
