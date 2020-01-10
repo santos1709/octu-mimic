@@ -27,6 +27,7 @@ class DataSource(DataScanner):
             got_json = request.json[0]
 
         elif requester == 'SelectModel':
+            self.user = got_json['user']
             self.model_name = got_json['model_name']
             self.model_version = got_json['model_version']
 
