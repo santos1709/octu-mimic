@@ -89,13 +89,15 @@ class Model():
         self.user = user
         if model:
             self.version = model.split('_')[0]
-            self.model_name = model.split('_')[1]
+            self.model_name = model.split('/')[0]
+            self.model_id = model.split('_')[1]
         else:
             db = Database()
             models_df = db.read_db('models')
             models_df.where(cond=models_df.usr == user, inplace=True)
             self.version = models_df.version.tolist()[0]
             self.model_name = models_df.name.tolist()[0]
+            self.model_id = models_df.id.tolist()[0]
 
     def generate_model_id(self, user):
         db = Database()
