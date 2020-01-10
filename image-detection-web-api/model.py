@@ -76,7 +76,7 @@ class Model():
                 self.select_model(user=user, name=name, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_path = os.path.join(self.model_name, f'{self.version}_{self.model_id}.h5')
+            model_path = os.path.join(self.model_name, 'models', f'{self.version}_{self.model_id}.h5')
 
         model = ObjectDetection()
         model.setModelTypeAsRetinaNet()
