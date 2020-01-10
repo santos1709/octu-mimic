@@ -30,6 +30,7 @@ class DataSource(DataScanner):
             self.user = got_json['user']
             self.model_name = got_json['model_name']
             self.model_version = got_json['model_version']
+            self.model_id = got_json['model_id']
 
         elif requester == 'Evaluate':
             self.user = got_json['user']
@@ -40,6 +41,7 @@ class DataSource(DataScanner):
         elif requester == 'Train':
             self.user = got_json['user']
             self.device_name = got_json['device_name']
+            self.model_name = got_json['model_name']
             self.last_untrained = got_json['last_untrained']
             self.new_model = got_json['new_model']
 
@@ -57,7 +59,7 @@ class Train(Resource):
         else:
             new_model = False
         model.train_model(
-            data_dir=os.path.join(config.UNTRAINED_IMAGES_PATH, data_source.last_untrained),
+            data_dir=os.path.join(config.UNTRAINED_IMAGES_PATH, data_source.model_name, data_source.last_untrained),
             user=data_source.user,
             new_model=new_model
         )
@@ -79,7 +81,11 @@ class SelectModel(Resource):
         data_source.get_from_json(requester=self.__class__.__name__)
 
         model = g.model
-        model.select_model(user=data_source.user, name=data_source.model_name, version=data_source.model_version)
+        model.select_model(
+            user=data_source.user,
+            name=data_source.model_name,
+            version=data_source.model_version,
+            model_id=data_source.model_id)
 
         response = {
             'new_model': {

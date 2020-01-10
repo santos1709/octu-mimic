@@ -15,7 +15,6 @@ class Model():
     def __init__(self):
         super().__init__()
         # self.train_data_size = 10
-        self.name = 'imageAI0'
         self.model_name = ''
         self.version = ''
         self.user = ''
@@ -33,12 +32,11 @@ class Model():
         files.sort(reverse=False)
         return files[0].split(path)[-1]
 
-    def select_model(self, user, name=None, version=None):
-        if not name and not version:
-            name = self.model_name
-            version = self.version
-
+    def select_model(self, user, name=None, version=None, model_id=None):
         db = Database()
+
+        if not name:
+            name = self.model_name
         db.update(
             table='models',
             column='name',
@@ -46,6 +44,9 @@ class Model():
             where_col='usr',
             where_val=user
         )
+
+        if not version:
+            version = self.version
         db.update(
             table='models',
             column='version',
@@ -54,21 +55,32 @@ class Model():
             where_val=user
         )
 
+        if not model_id:
+            model_id = self.model_id
+        db.update(
+            table='models',
+            column='id',
+            value=model_id,
+            where_col='usr',
+            where_val=user
+        )
+
         self.get_model_info(user)
 
-    def load_model(self, user, model_filename=None, update_db=False):
-        if model_filename:
-            name = model_filename.split('_')[1]
-            version = model_filename.split('_')[0]
+    def load_model(self, user, model_path=None, update_db=False):
+        if model_path:
+            name = model_path.split('/')[0]
+            version = model_path.split('_')[0]
+            model_id = model_path.split('_')[1]
             if update_db:
-                self.select_model(user=user, name=name, version=version)
+                self.select_model(user=user, name=name, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_filename = f'{self.version}_{self.model_name}.h5'
+            model_path = os.path.join(self.model_name, f'{self.version}_{self.model_id}.h5')
 
         model = ObjectDetection()
         model.setModelTypeAsRetinaNet()
-        model.setModelPath(os.path.join(config.MODELS_PATH, model_filename))
+        model.setModelPath(os.path.join(config.TRAIN_PATH, model_path))
         model.loadModel()
 
         return model
@@ -88,26 +100,18 @@ class Model():
     def generate_model_id(self, user):
         db = Database()
         self.model_id = str(uuid4()).split('-')[0]
-        model = f"{self.name}-{self.model_id}"
         db.update(
             table='models',
-            column='model',
-            value=model,
-            where_col='user',
+            column='id',
+            value=self.model_id,
+            where_col='usr',
             where_val=user
         )
 
-    def version_model(self, user):
+    def version_model(self, user, name):
         self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%s")
-
-        db = Database()
-        db.update(
-            table='models',
-            column='version',
-            value=self.version,
-            where_col='user',
-            where_val=user
-        )
+        self.generate_model_id(user)
+        self.select_model(user=user, name=name)
 
     def train_model(self, data_dir, user, new_model=False):
         # TODO: Test
@@ -127,7 +131,8 @@ class Model():
             show_network_summary=True
         )
 
-        self.version_model(user)
+        if new_model:
+            self.version_model(user=user, name=data_dir.split('/')[-2])
         self.model = model_trainer
         return self.model
 
