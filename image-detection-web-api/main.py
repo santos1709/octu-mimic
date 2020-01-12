@@ -28,7 +28,7 @@ class DataSource(DataScanner):
 
         elif requester == 'SelectModel':
             self.user = got_json['user']
-            self.model_name = got_json['model_name']
+            self.model_prj = got_json['model_prj']
             self.model_version = got_json['model_version']
             self.model_id = got_json['model_id']
 
@@ -41,7 +41,7 @@ class DataSource(DataScanner):
         elif requester == 'Train':
             self.user = got_json['user']
             self.device_name = got_json['device_name']
-            self.model_name = got_json['model_name']
+            self.model_prj = got_json['model_prj']
             self.last_untrained = got_json['last_untrained']
             self.new_model = got_json['new_model']
 
@@ -49,7 +49,7 @@ class DataSource(DataScanner):
 
 
 class Train(Resource):
-    def put(self):
+    def post(self):
         data_source = g.data_source
         data_source.get_from_json(requester=self.__class__.__name__)
 
@@ -59,14 +59,15 @@ class Train(Resource):
         else:
             new_model = False
         model.train_model(
-            data_dir=os.path.join(config.UNTRAINED_IMAGES_PATH, data_source.model_name, data_source.last_untrained),
+            data_dir=os.path.join(config.DATA_PATH, data_source.model_prj, data_source.last_untrained),
             user=data_source.user,
             new_model=new_model
         )
 
         response = {
             'Training info': {
-                'model': model.model_name,
+                'model_prj': model.model_prj,
+                'model_name': model.model_name,
                 'version': model.version,
                 'train data size': model.train_data_size,
                 'train status': 'successfully'
@@ -83,12 +84,14 @@ class SelectModel(Resource):
         model = g.model
         model.select_model(
             user=data_source.user,
-            name=data_source.model_name,
+            prj_name=data_source.model_prj,
             version=data_source.model_version,
-            model_id=data_source.model_id)
+            model_id=data_source.model_id
+        )
 
         response = {
             'new_model': {
+                'model_project': model.model_prj,
                 'model_name': model.model_name,
                 'model_version': model.version
             }
@@ -110,14 +113,14 @@ class ListModels(Resource):
 
 
 class Evaluate(Resource):
-    def get(self):
+    def post(self):
         data_source = g.data_source
         data_source.get_from_json(requester=self.__class__.__name__)
 
         model = g.model
         file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
 
-        res, last_untrained = model.detect(user=data_source.user, picture_name=file_path)
+        res, last_untrained = model.detect(user=data_source.user, picture_path=file_path)
 
         json_data = {
             'user': data_source.user,
@@ -126,8 +129,8 @@ class Evaluate(Resource):
             'results': res,
             'last_untrained': last_untrained
         }
-        requests.put("http://127.0.0.1:8880/validate", json=json_data)
-        requests.put("http://127.0.0.1:8880/train", json=json_data)
+        requests.get("http://127.0.0.1:8880/validate", json=json_data)
+        requests.post("http://127.0.0.1:8880/train", json=json_data)
 
         return jsonpify(res)
 

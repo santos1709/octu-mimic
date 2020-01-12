@@ -2,6 +2,7 @@ import glob
 import os
 from datetime import datetime, timedelta
 from uuid import uuid4
+from pathlib import Path
 
 import cv2
 from imageai.Detection import ObjectDetection
@@ -15,10 +16,11 @@ class Model():
     def __init__(self):
         super().__init__()
         # self.train_data_size = 10
-        self.model_name = ''
+        self.model_prj = ''
         self.version = ''
         self.user = ''
         self.model_id = ''
+        self.model_name = ''
         self.model = None
 
     @staticmethod
@@ -32,15 +34,15 @@ class Model():
         files.sort(reverse=False)
         return files[0].split(path)[-1]
 
-    def select_model(self, user, name=None, version=None, model_id=None):
+    def select_model(self, user, prj_name=None, version=None, model_id=None):
         db = Database()
 
-        if not name:
-            name = self.model_name
+        if not prj_name:
+            prj_name = self.model_prj
         db.update(
             table='models',
-            column='name',
-            value=name,
+            column='prj',
+            value=prj_name,
             where_col='usr',
             where_val=user
         )
@@ -69,18 +71,18 @@ class Model():
 
     def load_model(self, user, model_path=None, update_db=False):
         if model_path:
-            name = model_path.split('/')[0]
-            version = model_path.split('_')[0]
+            prj_name = model_path.split('/')[-3]
+            version = model_path.split('/')[-1].split('_')[0]
             model_id = model_path.split('_')[1]
             if update_db:
-                self.select_model(user=user, name=name, version=version, model_id=model_id)
+                self.select_model(user=user, prj_name=prj_name, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_path = os.path.join(self.model_name, 'models', f'{self.version}_{self.model_id}.h5')
+            model_path = os.path.join(self.model_prj, 'models', f'{self.version}_{self.model_id}.h5')
 
         model = ObjectDetection()
         model.setModelTypeAsRetinaNet()
-        model.setModelPath(os.path.join(config.TRAIN_PATH, model_path))
+        model.setModelPath(os.path.join(config.DATA_PATH, model_path))
         model.loadModel()
 
         return model
@@ -89,15 +91,16 @@ class Model():
         self.user = user
         if model:
             self.version = model.split('_')[0]
-            self.model_name = model.split('/')[0]
+            self.model_prj = model.split('/')[0]
             self.model_id = model.split('_')[1]
         else:
             db = Database()
             models_df = db.read_db('models')
             models_df.where(cond=models_df.usr == user, inplace=True)
             self.version = models_df.version.tolist()[0]
-            self.model_name = models_df.name.tolist()[0]
+            self.model_prj = models_df.prj.tolist()[0]
             self.model_id = models_df.id.tolist()[0]
+        self.model_name = f'{self.version}_{self.model_id}'
 
     def generate_model_id(self, user):
         db = Database()
@@ -110,13 +113,13 @@ class Model():
             where_val=user
         )
 
-    def version_model(self, user, name):
+    def version_model(self, user, prj_name):
         self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%s")
         self.generate_model_id(user)
-        self.select_model(user=user, name=name)
+        self.select_model(user=user, prj_name=prj_name)
 
     def train_model(self, data_dir, user, new_model=False):
-        # TODO: Test
+        # TODO: Fully Test
         # https://towardsdatascience.com/train-image-recognition-ai-with-5-lines-of-code-8ed0bdd8d9ba
         if new_model:
             model_trainer = ModelTraining()
@@ -134,23 +137,21 @@ class Model():
         )
 
         if new_model:
-            self.version_model(user=user, name=data_dir.split('/')[-2])
+            self.version_model(user=user, prj_name=data_dir.split('/')[-2])
         self.model = model_trainer
         return self.model
 
-    def detect(self, user, picture_name, model=None):
-        # TODO: Test
+    def detect(self, user, pic_path, model=None):
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
         detector = self.load_model(user, model)
 
-        pic_path = os.path.join(config.INPUT_IMAGES_PATH, picture_name)
         detections = detector.detectObjectsFromImage(
             input_image=pic_path,
-            output_image_path=os.path.join(config.OUTPUT_IMAGES_PATH, picture_name)
+            output_image_path=os.path.join(config.OUTPUT_IMAGES_PATH, pic_path.split('/')[-1])
         )
 
-        timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%h-%M-%s')
-        last_untrained_dir = ''.join(timestamp.split('-'))
+        timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%s')
+        identified_obj_dir = ''.join(timestamp.split('-'))
         image = cv2.imread(pic_path)
         results = dict()
         for obj_idx, obj in enumerate(detections):
@@ -159,13 +160,13 @@ class Model():
                detections[obj_idx]['box_points'][0]:detections[obj_idx]['box_points'][2]
             ]
 
-            detection_path = os.path.join(
-                config.UNTRAINED_IMAGES_PATH,
-                last_untrained_dir,
-                obj["name"],
-                f'{timestamp}.png'
+            obj_dir = os.path.join(
+                config.DATA_PATH,
+                identified_obj_dir,
+                obj["name"]
             )
-            cv2.imwrite(detection_path, crop_img)
+            Path(obj_dir).mkdir(parents=True, exist_ok=True)
+            cv2.imwrite(os.path.join(obj_dir, f'{str(uuid4()).split("-")[-1]}.png'), crop_img)
             results[obj["name"]] = obj["percentage_probability"]
 
-        return results, last_untrained_dir
+        return results, identified_obj_dir

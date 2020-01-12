@@ -16,7 +16,7 @@ class DataScanner:
         self.uid = ''
         self.pic = ''
         self.model_version = ''
-        self.model_name = ''
+        self.model_prj = ''
         self.model_id = ''
         self.last_untrained = ''
         self.new_model = ''
