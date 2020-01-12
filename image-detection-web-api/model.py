@@ -143,15 +143,17 @@ class Model():
 
     def detect(self, user, pic_path, model=None):
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
-        detector = self.load_model(user, model)
+        out_pic_path = os.path.join(''.join(pic_path.split('/')[:1]), 'output', pic_path.split('/')[-1])
+        Path(pic_path).mkdir(parents=True, exist_ok=True)
+        Path(out_pic_path).mkdir(parents=True, exist_ok=True)
 
+        detector = self.load_model(user, model)
         detections = detector.detectObjectsFromImage(
             input_image=pic_path,
-            output_image_path=os.path.join(config.OUTPUT_IMAGES_PATH, pic_path.split('/')[-1])
+            output_image_path=out_pic_path
         )
 
-        timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%s')
-        identified_obj_dir = ''.join(timestamp.split('-'))
+        identified_obj_dir = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%s').replace('-', '')
         image = cv2.imread(pic_path)
         results = dict()
         for obj_idx, obj in enumerate(detections):
@@ -166,6 +168,7 @@ class Model():
                 obj["name"]
             )
             Path(obj_dir).mkdir(parents=True, exist_ok=True)
+
             cv2.imwrite(os.path.join(obj_dir, f'{str(uuid4()).split("-")[-1]}.png'), crop_img)
             results[obj["name"]] = obj["percentage_probability"]
 
