@@ -114,13 +114,13 @@ class Model():
         )
 
     def version_model(self, user, prj_name):
-        self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%s")
+        self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%S")
         self.generate_model_id(user)
         self.select_model(user=user, prj_name=prj_name)
 
     def train_model(self, data_dir, user, new_model=False):
-        # TODO: Fully Test
-        # https://towardsdatascience.com/train-image-recognition-ai-with-5-lines-of-code-8ed0bdd8d9ba
+        # TODO: Change API from image prediction to image detection
+        # https://imageai.readthedocs.io/en/latest/customdetection/index.html
         if new_model:
             model_trainer = ModelTraining()
             model_trainer.setModelTypeAsResNet()
@@ -142,6 +142,7 @@ class Model():
         return self.model
 
     def detect(self, user, pic_path, model=None):
+        # TODO: Change output files to be trained according with image detection API
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
         out_pic_path = os.path.join('/'.join(pic_path.split('/')[:-1]), 'output', pic_path.split('/')[-1])
         Path('/'.join(pic_path.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
@@ -153,7 +154,7 @@ class Model():
             output_image_path=out_pic_path
         )
 
-        identified_obj_dir = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%s').replace('-', '')
+        identified_obj_dir = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S').replace('-', '')
         image = cv2.imread(pic_path)
         results = dict()
         for obj_idx, obj in enumerate(detections):

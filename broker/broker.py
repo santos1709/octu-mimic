@@ -1,21 +1,23 @@
+import json
+
 import paho.mqtt.client as mqtt
-import random
-import time
 import requests
+
 import config
-from db import Database
+from data_scanner import DataScanner
 
 
-def save_data(msg)
-    token = db.select('token', config.MODEL_TABLE, 'user', config.USER)
+def save_data(image_serialized, prj, user, device_name, operator):
+    data = DataScanner()
+    img_path = data.save_picture(serialized_file=image_serialized, prj=prj, user=user, device_name=device_name)
+
     json_data = {
-            "user": config.USER,
-            "device": config.DEVICE,
-            "key": msg.payload.split('-')[0],
-            "value": msg.payload.split('-')[-1],
-            "token": token,
-            "timestamp": time.strftime('%Y-%m-%d', time.localtime())
-            }
+        "user": user,
+        "picture": img_path,
+        "device_name": device_name,
+        "operator": operator
+    }
+
     requests.post(f"{config.WEBAPP}/data/send", data=json_data)
 
 
@@ -31,18 +33,24 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    print(f'{msg.topic} {msg.payload}') 
-    save_data(msg)
+    print(f'{msg.topic} {msg.payload}')
+    msg_dict = json.loads(msg.payload.decode().replace("'", '"'))
+    prj = msg_dict['project']
+    user = msg_dict['user']
+    device_name = msg_dict['device']
+    operator = msg_dict['operator']
+    image = msg_dict['image']
+
+    save_data(image_serialized=image, prj=prj, user=user, device_name=device_name, operator=operator)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
-    # client.username_pw_set('bwoigzxu', 'NvYmeI7tN46L')
-    # client.connect("m13.cloudmqtt.com", 18869, 60)
+
     client.username_pw_set(config.USER, config.PASS)
-    client.connect(config.HOST, config.PORT, 60)
+    client.connect(config.HOST, int(config.PORT), 60)
 
     # Blocking call that processes network traffic, dispatches callbacks and
     # handles reconnecting.

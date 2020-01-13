@@ -65,6 +65,7 @@ class Train(Resource):
             new_model=new_model
         )
 
+        K.clear_session()
         response = {
             'Training info': {
                 'model_prj': model.model_prj,
@@ -119,7 +120,8 @@ class Evaluate(Resource):
         data_source.get_from_json(requester=self.__class__.__name__)
 
         model = g.model
-        file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
+        # file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
+        file_path = data_source.pic
 
         res, last_untrained = model.detect(user=data_source.user, pic_path=file_path)
 
@@ -136,6 +138,7 @@ class Evaluate(Resource):
             'new_model': new_model,
             'last_untrained': last_untrained
         }
+        K.clear_session()
         requests.get("http://127.0.0.1:8880/data/validate", json=json_data)
         requests.post("http://127.0.0.1:8880/model/train", json=json_data)
 
