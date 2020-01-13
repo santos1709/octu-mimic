@@ -129,8 +129,8 @@ class Evaluate(Resource):
             'results': res,
             'last_untrained': last_untrained
         }
-        requests.get("http://127.0.0.1:8880/validate", json=json_data)
-        requests.post("http://127.0.0.1:8880/train", json=json_data)
+        requests.get("http://127.0.0.1:8880/data/validate", json=json_data)
+        requests.post("http://127.0.0.1:8880/model/train", json=json_data)
 
         return jsonpify(res)
 
