@@ -143,9 +143,9 @@ class Model():
 
     def detect(self, user, pic_path, model=None):
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
-        out_pic_path = os.path.join(''.join(pic_path.split('/')[:1]), 'output', pic_path.split('/')[-1])
-        Path(pic_path).mkdir(parents=True, exist_ok=True)
-        Path(out_pic_path).mkdir(parents=True, exist_ok=True)
+        out_pic_path = os.path.join(''.join(pic_path.split('/')[1:-1]), 'output', pic_path.split('/')[-1])
+        Path(''.join(pic_path.split('/')[1:-1])).mkdir(parents=True, exist_ok=True)
+        Path(''.join(out_pic_path.split('/')[1:-1])).mkdir(parents=True, exist_ok=True)
 
         detector = self.load_model(user, model)
         detections = detector.detectObjectsFromImage(
