@@ -166,6 +166,7 @@ class Model():
                 config.DATA_PATH,
                 self.model_prj,
                 identified_obj_dir,
+                'train',
                 obj["name"]
             )
             Path(obj_dir).mkdir(parents=True, exist_ok=True)
