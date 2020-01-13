@@ -36,6 +36,7 @@ class DataSource(DataScanner):
             self.user = got_json['user']
             self.pic = got_json['picture']
             self.device_name = got_json['device_name']
+            self.new_model = got_json.get('new_model')
             self.operator = got_json['operator']
 
         elif requester == 'Train':
@@ -122,12 +123,17 @@ class Evaluate(Resource):
 
         res, last_untrained = model.detect(user=data_source.user, pic_path=file_path)
 
+        new_model = data_source.new_model
+        if not new_model:
+            new_model = 'no'
+
         json_data = {
             'user': data_source.user,
             'model_prj': model.model_prj,
             'device_name': data_source.device_name,
             'operator': data_source.operator,
             'results': res,
+            'new_model': new_model,
             'last_untrained': last_untrained
         }
         requests.get("http://127.0.0.1:8880/data/validate", json=json_data)
