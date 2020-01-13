@@ -164,6 +164,7 @@ class Model():
 
             obj_dir = os.path.join(
                 config.DATA_PATH,
+                self.model_prj,
                 identified_obj_dir,
                 obj["name"]
             )

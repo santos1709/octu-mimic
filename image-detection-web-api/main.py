@@ -124,7 +124,8 @@ class Evaluate(Resource):
 
         json_data = {
             'user': data_source.user,
-            'device': data_source.device_name,
+            'model_prj': model.model_prj,
+            'device_name': data_source.device_name,
             'operator': data_source.operator,
             'results': res,
             'last_untrained': last_untrained
