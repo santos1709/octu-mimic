@@ -45,6 +45,7 @@ class DataSource(DataScanner):
             self.model_prj = got_json['model_prj']
             self.last_untrained = got_json['last_untrained']
             self.new_model = got_json['new_model']
+            self.objs_array = got_json['objs']
 
         self.got_json = got_json
 
@@ -123,7 +124,7 @@ class Evaluate(Resource):
         # file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
         file_path = data_source.pic
 
-        res, last_untrained = model.detect(user=data_source.user, pic_path=file_path)
+        res, last_untrained, objs = model.detect(user=data_source.user, pic_path=file_path)
 
         new_model = data_source.new_model
         if not new_model:
@@ -136,7 +137,8 @@ class Evaluate(Resource):
             'operator': data_source.operator,
             'results': res,
             'new_model': new_model,
-            'last_untrained': last_untrained
+            'last_untrained': last_untrained,
+            'objs': objs
         }
         K.clear_session()
         requests.get("http://127.0.0.1:8880/data/validate", json=json_data)

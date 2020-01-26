@@ -50,7 +50,7 @@ class DataScanner:
     @staticmethod
     def save_file(file_data, file_path):
         Path('/'.join(file_path.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
-        with open(file_path, 'w+') as f:
+        with open(file_path, 'wb+') as f:
             f.write(file_data)
 
         return file_path
@@ -59,11 +59,12 @@ class DataScanner:
         uid = str(uuid4()).split('-')[0]
         timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S')
 
-        file_path = os.path.join(config.PICS_PATH, prj, user, device_name, f'{timestamp}_{uid}')
-        self.save_file(serialized_file, file_path)
-
-        deserialized_file = self.deserialize(file_path)
-        pic_path = f'{file_path}.png'
+        file_path = os.path.join(config.PICS_PATH, prj, user, device_name, 'train', 'images', f'{timestamp}_{uid}')
+        # self.save_file(serialized_file, file_path)
+        #
+        # deserialized_file = self.deserialize(file_path)
+        deserialized_file = serialized_file
+        pic_path = f'{file_path}.jpg'
         self.save_file(deserialized_file, pic_path)
 
         return pic_path

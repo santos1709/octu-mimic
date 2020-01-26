@@ -33,13 +33,14 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    print(f'{msg.topic} {msg.payload}')
-    msg_dict = json.loads(msg.payload.decode().replace("'", '"'))
-    prj = msg_dict['project']
-    user = msg_dict['user']
-    device_name = msg_dict['device']
-    operator = msg_dict['operator']
-    image = msg_dict['image']
+    print(f'{msg.topic} {type(msg.payload)}')
+    # msg_dict = json.loads(msg.payload.decode().replace("'", '"'))
+    topic_levels = msg.topic.split('/')
+    prj = topic_levels[1]
+    user = topic_levels[2]
+    device_name = topic_levels[3]
+    operator = topic_levels[4]
+    image = msg.payload
 
     save_data(image_serialized=image, prj=prj, user=user, device_name=device_name, operator=operator)
 
