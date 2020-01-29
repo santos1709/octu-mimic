@@ -59,8 +59,8 @@ class Model():
         xml_str = ET.tostring(annotation)
         root = etree.fromstring(xml_str)
         xml_str = etree.tostring(root, pretty_print=True)
-        extension = img.name.split('.')[-1]
-        save_path = os.path.join(savedir, img.name.replace(extension, 'xml'))
+        extension = img_path.split('/')[-1].split('.')[-1]
+        save_path = os.path.join(savedir, img_path.split('/')[-1].replace(extension, 'xml'))
         with open(save_path, 'wb') as temp_xml:
             temp_xml.write(xml_str)
 
@@ -114,19 +114,22 @@ class Model():
         if model_path:
             prj_name = model_path.split('/')[-3]
             version = model_path.split('/')[-1].split('_')[0]
-            model_id = model_path.split('_')[1]
+            model_id = model_path.split('_')[-1]
             self.model_path = model_path
             if update_db:
                 self.select_model(user=user, prj_name=prj_name, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_path = os.path.join(self.model_prj, 'models', f'{self.version}_{self.model_id}.h5')
+            model_path = os.path.join(self.user, self.model_prj, 'models', f'{self.version}_{self.model_id}.h5')
             self.model_path = model_path
 
         model = CustomObjectDetection()
         model.setModelTypeAsYOLOv3()
         model.setModelPath(os.path.join(config.DATA_PATH, model_path))
-        model.setJsonPath(os.path.join(config.DATA_PATH, model_path.replace('.h5', '.json')))
+        model.setJsonPath(os.path.join(
+            config.DATA_PATH,
+            model_path.replace('models', 'models/json').replace('.h5', '.json')
+        ))
 
         model.loadModel()
 
