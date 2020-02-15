@@ -184,7 +184,8 @@ class Model():
         path = Path(os.path.join(*pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 
-        out_pic_path_list = pic_path.split('/').insert(-2, 'output')
+        out_pic_path_list = pic_path.split('/')
+        out_pic_path_list.insert(-2, 'output')
         out_pic_path = os.path.join(*out_pic_path_list)
         path = Path(os.path.join(*out_pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
