@@ -27,7 +27,8 @@ class Train(Resource):
         else:
             new_model = False
         model.train_model(
-            data_dir=os.path.join(config.DATA_PATH, data_source.last_untrained),
+            objs_array=data_source.objs_array,
+            data_dir=os.path.join(config.DATA_PATH, data_source.user, data_source.last_untrained),
             user=data_source.user,
             new_model=new_model
         )
@@ -100,7 +101,7 @@ class Evaluate(Resource):
             'objs': objs
         }
         K.clear_session()
-        requests.get(f'{config.HOST_NAME}{config.EVALUATE_ROUTE}', json=json_data)
+        requests.get(f'{config.HOST_NAME}{config.VALIDATE_ROUTE}', json=json_data)
         requests.post(f'{config.HOST_NAME}{config.TRAIN_ROUTE}', json=json_data)
 
         return jsonpify(res)
