@@ -113,9 +113,10 @@ class Model():
 
         model = CustomObjectDetection()
         model.setModelTypeAsYOLOv3()
-        model.setModelPath(os.path.join(config.DATA_PATH, model_path))
+        model.setModelPath(os.path.join(config.DATA_PATH, user, model_path))
         model.setJsonPath(os.path.join(
             config.DATA_PATH,
+            user,
             model_path.replace('models', 'models/json').replace('.h5', '.json')
         ))
 
@@ -181,13 +182,13 @@ class Model():
     def detect(self, user, pic_path, model=None):
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
 
-        path = Path(os.path.join(*pic_path.split('/')[:-1]))
+        path = Path('/' + os.path.join(*pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 
         out_pic_path_list = pic_path.split('/')
         out_pic_path_list.insert(-2, 'output')
         out_pic_path = os.path.join(*out_pic_path_list)
-        path = Path(os.path.join(*out_pic_path.split('/')[:-1]))
+        path = Path('/' + os.path.join(*out_pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 
         # from imageai.Detection.Custom import DetectionModelTrainer
