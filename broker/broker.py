@@ -7,9 +7,9 @@ import config
 from data_scanner import DataScanner
 
 
-def save_data(image_serialized, prj, user, device_name, operator):
+def save_data(image_serialized, user, device_name, operator):
     data = DataScanner()
-    img_path = data.save_picture(serialized_file=image_serialized, prj=prj, user=user, device_name=device_name)
+    img_path = data.save_picture(serialized_file=image_serialized, user=user, device_name=device_name)
 
     json_data = {
         "user": user,
@@ -36,13 +36,12 @@ def on_message(client, userdata, msg):
     print(f'{msg.topic} {type(msg.payload)}')
     # msg_dict = json.loads(msg.payload.decode().replace("'", '"'))
     topic_levels = msg.topic.split('/')
-    prj = topic_levels[1]
-    user = topic_levels[2]
-    device_name = topic_levels[3]
-    operator = topic_levels[4]
+    user = topic_levels[1]
+    device_name = topic_levels[2]
+    operator = topic_levels[3]
     image = msg.payload
 
-    save_data(image_serialized=image, prj=prj, user=user, device_name=device_name, operator=operator)
+    save_data(image_serialized=image, user=user, device_name=device_name, operator=operator)
 
 
 if __name__ == "__main__":

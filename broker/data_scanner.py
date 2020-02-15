@@ -16,7 +16,6 @@ class DataScanner:
         self.uid = ''
         self.pic = ''
         self.model_version = ''
-        self.model_prj = ''
         self.model_id = ''
         self.last_untrained = ''
         self.new_model = ''
@@ -55,11 +54,11 @@ class DataScanner:
 
         return file_path
 
-    def save_picture(self, serialized_file, prj, user, device_name):
-        uid = str(uuid4()).split('-')[0]
+    def save_picture(self, serialized_file, user, device_name):
+        # uid = str(uuid4()).split('-')[0]
         timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S')
 
-        file_path = os.path.join(config.PICS_PATH, prj, user, device_name, 'train', 'images', f'{timestamp}_{uid}')
+        file_path = os.path.join(config.PICS_PATH, user, 'train', 'images', f'{device_name}_{timestamp}')
         # self.save_file(serialized_file, file_path)
         #
         # deserialized_file = self.deserialize(file_path)

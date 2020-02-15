@@ -20,7 +20,6 @@ class Model():
     def __init__(self):
         super().__init__()
         # self.train_data_size = 10
-        self.model_prj = ''
         self.version = ''
         self.user = ''
         self.model_id = ''
@@ -29,7 +28,7 @@ class Model():
         self.model = None
 
     @staticmethod
-    def write_xml(folder, img_path, objects, tl, br, savedir):
+    def write_xml(img_path, objects, tl, br, savedir):
         if not os.path.isdir(savedir):
             os.mkdir(savedir)
 
@@ -37,7 +36,7 @@ class Model():
         height, width, depth = image.shape
 
         annotation = ET.Element('annotation')
-        ET.SubElement(annotation, 'folder').text = folder
+        ET.SubElement(annotation, 'folder').text = os.path.join(img_path.split('/')[:-1])
         ET.SubElement(annotation, 'filename').text = img_path.split('/')[-1]
         ET.SubElement(annotation, 'segmented').text = '0'
         size = ET.SubElement(annotation, 'size')
@@ -59,8 +58,8 @@ class Model():
         xml_str = ET.tostring(annotation)
         root = etree.fromstring(xml_str)
         xml_str = etree.tostring(root, pretty_print=True)
-        extension = img.name.split('.')[-1]
-        save_path = os.path.join(savedir, img.name.replace(extension, 'xml'))
+        extension = img_path.split('/')[-1].split('.')[-1]
+        save_path = os.path.join(savedir, img_path.split('/')[-1].replace(extension, 'xml'))
         with open(save_path, 'wb') as temp_xml:
             temp_xml.write(xml_str)
 
@@ -75,18 +74,8 @@ class Model():
         files.sort(reverse=False)
         return files[0].split(path)[-1]
 
-    def select_model(self, user, prj_name=None, version=None, model_id=None):
+    def select_model(self, user, version=None, model_id=None):
         db = Database()
-
-        if not prj_name:
-            prj_name = self.model_prj
-        db.update(
-            table='models',
-            column='prj',
-            value=prj_name,
-            where_col='usr',
-            where_val=user
-        )
 
         if not version:
             version = self.version
@@ -112,15 +101,14 @@ class Model():
 
     def load_model(self, user, model_path=None, update_db=False):
         if model_path:
-            prj_name = model_path.split('/')[-3]
             version = model_path.split('/')[-1].split('_')[0]
             model_id = model_path.split('_')[1]
             self.model_path = model_path
             if update_db:
-                self.select_model(user=user, prj_name=prj_name, version=version, model_id=model_id)
+                self.select_model(user=user, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_path = os.path.join(self.model_prj, 'models', f'{self.version}_{self.model_id}.h5')
+            model_path = os.path.join('models', f'{self.version}_{self.model_id}.h5')
             self.model_path = model_path
 
         model = CustomObjectDetection()
@@ -136,14 +124,12 @@ class Model():
         self.user = user
         if model:
             self.version = model.split('_')[0]
-            self.model_prj = model.split('/')[0]
             self.model_id = model.split('_')[1]
         else:
             db = Database()
             models_df = db.read_db('models')
             models_df.where(cond=models_df.usr == user, inplace=True)
             self.version = models_df.version.tolist()[0]
-            self.model_prj = models_df.prj.tolist()[0]
             self.model_id = models_df.id.tolist()[0]
         self.model_name = f'{self.version}_{self.model_id}'
 
@@ -158,13 +144,12 @@ class Model():
             where_val=user
         )
 
-    def version_model(self, user, prj_name):
+    def version_model(self, user):
         self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%S")
         self.generate_model_id(user)
-        self.select_model(user=user, prj_name=prj_name)
+        self.select_model(user=user)
 
-    def train_model(self, data_dir, user, objs_array, new_model=False):
-        # TODO: Change API from image prediction to image detection
+    def train_model(self, data_dir, user, objs_array, model=None, new_model=False):
         # https://imageai.readthedocs.io/en/latest/customdetection/index.html
 
         if new_model:
@@ -172,7 +157,7 @@ class Model():
             model_trainer.setModelTypeAsYOLOv3()
             model_path = ''
         else:
-            model_trainer = self.load_model(user=user)
+            model_trainer = self.load_model(user=user, model_path=model)
             model_path = self.model_path
 
         model_trainer.setDataDirectory(data_directory=data_dir)
@@ -185,20 +170,21 @@ class Model():
         model_trainer.trainModel()
 
         if new_model:
-            self.version_model(user=user, prj_name=data_dir.split('/')[-2])
+            self.version_model(user=user)
 
         self.model = model_trainer
         return self.model
 
     def detect(self, user, pic_path, model=None):
-        # TODO: Change output files to be trained according with image detection API
         # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
 
-        # out_pic_path = os.path.join(os.path.join(pic_path.split('/')[:-1]), 'output', pic_path.split('/')[-1])
-        out_pic_path_list = pic_path.split('/').insert(-1, 'output')
+        path = Path(os.path.join(*pic_path.split('/')[:-1]))
+        path.mkdir(parents=True, exist_ok=True)
+
+        out_pic_path_list = pic_path.split('/').insert(-2, 'output')
         out_pic_path = os.path.join(*out_pic_path_list)
-        Path(os.path.join(*pic_path.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
-        Path(os.path.join(*out_pic_path.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
+        path = Path(os.path.join(*out_pic_path.split('/')[:-1]))
+        path.mkdir(parents=True, exist_ok=True)
 
         # from imageai.Detection.Custom import DetectionModelTrainer
 
@@ -221,7 +207,6 @@ class Model():
             #
             # obj_dir = os.path.join(
             #     config.DATA_PATH,
-            #     self.model_prj,
             #     identified_obj_dir,
             #     'train',
             #     obj["name"]
@@ -235,9 +220,8 @@ class Model():
             tl.append(tuple(obj['box_points'][1::2]))
             br.append(tuple(obj['box_points'][::2]))
 
-        annotations_path = os.path.join(pic_path.split('/')[:-2], 'annotations')
+        annotations_path = os.path.join(pic_path.split('/')[:-1], 'annotations')
         self.write_xml(
-            os.path.join(*out_pic_path.split('/')[:-1]),
             pic_path,
             objs,
             tl,

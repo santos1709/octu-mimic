@@ -10,50 +10,16 @@ from flask_jsonpify import jsonpify
 from flask_restful import Resource, Api
 from keras import backend as K
 
-from data_scanner import DataScanner
+from data_scanner import DataScanner as DataSource
 from db.database import Database
 from model import Model
 import config
 
 
-class DataSource(DataScanner):
-    def __init__(self):
-        self.got_json = None
-        super().__init__()
-
-    def get_from_json(self, requester):
-        got_json = request.json
-        if type(got_json) == list:
-            got_json = request.json[0]
-
-        elif requester == 'SelectModel':
-            self.user = got_json['user']
-            self.model_prj = got_json['model_prj']
-            self.model_version = got_json['model_version']
-            self.model_id = got_json['model_id']
-
-        elif requester == 'Evaluate':
-            self.user = got_json['user']
-            self.pic = got_json['picture']
-            self.device_name = got_json['device_name']
-            self.new_model = got_json.get('new_model')
-            self.operator = got_json['operator']
-
-        elif requester == 'Train':
-            self.user = got_json['user']
-            self.device_name = got_json['device_name']
-            self.model_prj = got_json['model_prj']
-            self.last_untrained = got_json['last_untrained']
-            self.new_model = got_json['new_model']
-            self.objs_array = got_json['objs']
-
-        self.got_json = got_json
-
-
 class Train(Resource):
     def post(self):
         data_source = g.data_source
-        data_source.get_from_json(requester=self.__class__.__name__)
+        data_source.get_from_json(request=request, requester=self.__class__.__name__)
 
         model = g.model
         if data_source.new_model == "yes":
@@ -61,7 +27,7 @@ class Train(Resource):
         else:
             new_model = False
         model.train_model(
-            data_dir=os.path.join(config.DATA_PATH, data_source.model_prj, data_source.last_untrained),
+            data_dir=os.path.join(config.DATA_PATH, data_source.last_untrained),
             user=data_source.user,
             new_model=new_model
         )
@@ -69,7 +35,6 @@ class Train(Resource):
         K.clear_session()
         response = {
             'Training info': {
-                'model_prj': model.model_prj,
                 'model_name': model.model_name,
                 'version': model.version,
                 'train data size': model.train_data_size,
@@ -82,19 +47,17 @@ class Train(Resource):
 class SelectModel(Resource):
     def post(self):
         data_source = g.data_source
-        data_source.get_from_json(requester=self.__class__.__name__)
+        data_source.get_from_json(request=request, requester=self.__class__.__name__)
 
         model = g.model
         model.select_model(
             user=data_source.user,
-            prj_name=data_source.model_prj,
             version=data_source.model_version,
             model_id=data_source.model_id
         )
 
         response = {
             'new_model': {
-                'model_project': model.model_prj,
                 'model_name': model.model_name,
                 'model_version': model.version
             }
@@ -118,13 +81,10 @@ class ListModels(Resource):
 class Evaluate(Resource):
     def post(self):
         data_source = g.data_source
-        data_source.get_from_json(requester=self.__class__.__name__)
+        data_source.get_from_json(request=request, requester=self.__class__.__name__)
 
         model = g.model
-        # file_path = os.path.join(config.PICS_PATH, data_source.device_name, data_source.pic)
-        file_path = data_source.pic
-
-        res, last_untrained, objs = model.detect(user=data_source.user, pic_path=file_path)
+        res, last_untrained, objs = model.detect(user=data_source.user, pic_path=data_source.pic)
 
         new_model = data_source.new_model
         if not new_model:
@@ -132,7 +92,6 @@ class Evaluate(Resource):
 
         json_data = {
             'user': data_source.user,
-            'model_prj': model.model_prj,
             'device_name': data_source.device_name,
             'operator': data_source.operator,
             'results': res,
@@ -141,8 +100,8 @@ class Evaluate(Resource):
             'objs': objs
         }
         K.clear_session()
-        requests.get("http://127.0.0.1:8880/data/validate", json=json_data)
-        requests.post("http://127.0.0.1:8880/model/train", json=json_data)
+        requests.get(f'{config.HOST_NAME}{config.EVALUATE_ROUTE}', json=json_data)
+        requests.post(f'{config.HOST_NAME}{config.TRAIN_ROUTE}', json=json_data)
 
         return jsonpify(res)
 
@@ -169,11 +128,11 @@ def objects_set(app, data_source, db, model):
 def create_app():
     app = Flask(__name__)
     api = Api(app)
-    api.add_resource(Evaluate, '/data/evaluate')
-    api.add_resource(Validate, '/data/validate')
-    api.add_resource(Train, '/model/train')
-    api.add_resource(SelectModel, '/model/select')
-    api.add_resource(ListModels, '/model/list')
+    api.add_resource(Evaluate, config.EVALUATE_ROUTE)
+    api.add_resource(Validate, config.VALIDATE_ROUTE)
+    api.add_resource(Train, config.TRAIN_ROUTE)
+    api.add_resource(SelectModel, config.SELECT_ROUTE)
+    api.add_resource(ListModels, config.LIST_ROUTE)
 
     return app
 
@@ -181,4 +140,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     with objects_set(app, DataSource(), Database(), Model()):
-        app.run(host='0.0.0.0', port='8880')
+        app.run(host=config.HOST, port=config.PORT)
