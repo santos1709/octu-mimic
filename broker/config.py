@@ -18,5 +18,4 @@ PORT = "1883"
 
 # Main webapp infos
 WEBAPP = "192.168.122.66:6379"
-PICS_PATH = f'{WORKING_DIR}/../image-detection-web-api/data/pictures'
-
+PICS_PATH = f'{WORKING_DIR}/../image-detection-web-api/data'

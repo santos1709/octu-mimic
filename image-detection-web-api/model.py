@@ -102,7 +102,7 @@ class Model():
     def load_model(self, user, model_path=None, update_db=False):
         if model_path:
             version = model_path.split('/')[-1].split('_')[0]
-            model_id = model_path.split('_')[1]
+            model_id = model_path.split('_')[-1]
             self.model_path = model_path
             if update_db:
                 self.select_model(user=user, version=version, model_id=model_id)
@@ -114,7 +114,10 @@ class Model():
         model = CustomObjectDetection()
         model.setModelTypeAsYOLOv3()
         model.setModelPath(os.path.join(config.DATA_PATH, model_path))
-        model.setJsonPath(os.path.join(config.DATA_PATH, model_path.replace('.h5', '.json')))
+        model.setJsonPath(os.path.join(
+            config.DATA_PATH,
+            model_path.replace('models', 'models/json').replace('.h5', '.json')
+        ))
 
         model.loadModel()
 

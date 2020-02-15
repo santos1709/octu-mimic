@@ -59,6 +59,7 @@ class DataScanner:
         timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S')
 
         file_path = os.path.join(config.PICS_PATH, user, 'train', 'images', f'{device_name}_{timestamp}')
+
         # self.save_file(serialized_file, file_path)
         #
         # deserialized_file = self.deserialize(file_path)
