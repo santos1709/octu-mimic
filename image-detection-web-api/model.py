@@ -5,8 +5,6 @@ from uuid import uuid4
 from pathlib import Path
 
 import cv2
-from imageai.Detection import ObjectDetection
-from imageai.Prediction.Custom import ModelTraining
 from imageai.Detection.Custom import DetectionModelTrainer
 from imageai.Detection.Custom import CustomObjectDetection
 from lxml import etree
@@ -19,7 +17,6 @@ from db.database import Database
 class Model():
     def __init__(self):
         super().__init__()
-        # self.train_data_size = 10
         self.version = ''
         self.user = ''
         self.model_id = ''
@@ -36,7 +33,7 @@ class Model():
         height, width, depth = image.shape
 
         annotation = ET.Element('annotation')
-        ET.SubElement(annotation, 'folder').text = os.path.join(*img_path.split('/')[:-1])
+        ET.SubElement(annotation, 'folder').text = '/' + os.path.join(*img_path.split('/')[:-1])
         ET.SubElement(annotation, 'filename').text = img_path.split('/')[-1]
         ET.SubElement(annotation, 'segmented').text = '0'
         size = ET.SubElement(annotation, 'size')
@@ -108,12 +105,12 @@ class Model():
                 self.select_model(user=user, version=version, model_id=model_id)
         else:
             self.get_model_info(user)
-            model_path = os.path.join('models', f'{self.version}_{self.model_id}.h5')
+            model_path = os.path.join(config.DATA_PATH, user, 'models', f'{self.version}_{self.model_id}.h5')
             self.model_path = model_path
 
         model = CustomObjectDetection()
         model.setModelTypeAsYOLOv3()
-        model.setModelPath(os.path.join(config.DATA_PATH, user, model_path))
+        model.setModelPath(model_path)
         model.setJsonPath(os.path.join(
             config.DATA_PATH,
             user,
@@ -154,8 +151,6 @@ class Model():
         self.select_model(user=user)
 
     def train_model(self, data_dir, user, objs_array, model=None, new_model=False):
-        # https://imageai.readthedocs.io/en/latest/customdetection/index.html
-
         if new_model:
             model_path = ''
         else:
@@ -166,7 +161,7 @@ class Model():
         model_trainer.setModelTypeAsYOLOv3()
         model_trainer.setDataDirectory(data_directory=data_dir)
         model_trainer.setTrainConfig(
-            object_names_array=objs_array,
+            object_names_array=list(set(objs_array)),
             batch_size=4,
             num_experiments=200,
             train_from_pretrained_model=model_path
@@ -180,10 +175,6 @@ class Model():
         return self.model
 
     def detect(self, user, pic_path, model=None):
-        # https://towardsdatascience.com/object-detection-with-10-lines-of-code-d6cb4d86f606
-        identified_obj_dir = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S').replace('-', '')
-        pic_path.replace(user, f'{user}/{identified_obj_dir}')
-
         path = Path('/' + os.path.join(*pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 
@@ -193,42 +184,22 @@ class Model():
         path = Path('/' + os.path.join(*out_pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 
-        # from imageai.Detection.Custom import DetectionModelTrainer
-
         detector = self.load_model(user, model)
         detections = detector.detectObjectsFromImage(
             input_image=pic_path,
             output_image_path=out_pic_path
         )
 
-        # image = cv2.imread(pic_path)
         results = dict()
         objs = list()
         br = list()
         tl = list()
-        # for obj_idx, obj in enumerate(detections):
         for obj in detections:
-            # crop_img = image[
-            #    detections[obj_idx]['box_points'][1]:detections[obj_idx]['box_points'][3],
-            #    detections[obj_idx]['box_points'][0]:detections[obj_idx]['box_points'][2]
-            # ]
-            #
-            # obj_dir = os.path.join(
-            #     config.DATA_PATH,
-            #     identified_obj_dir,
-            #     'train',
-            #     obj["name"]
-            # )
-            # Path(obj_dir).mkdir(parents=True, exist_ok=True)
-            #
-            # cv2.imwrite(os.path.join(obj_dir, f'{str(uuid4()).split("-")[-1]}.png'), crop_img)
-            # results[obj["name"]] = obj["percentage_probability"]
-
             objs.append(obj['name'])
             tl.append(tuple(obj['box_points'][1::2]))
             br.append(tuple(obj['box_points'][::2]))
 
-        annotations_path = os.path.join(*pic_path.split('/')[:-1], 'annotations')
+        annotations_path = '/' + os.path.join(*pic_path.split('/')[:-2], 'annotations')
         self.write_xml(
             pic_path,
             objs,
@@ -236,4 +207,4 @@ class Model():
             br,
             annotations_path
         )
-        return results, identified_obj_dir, objs
+        return results, '', objs

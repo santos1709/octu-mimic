@@ -1,7 +1,5 @@
-import json
 import os
 from contextlib import contextmanager
-from uuid import uuid4
 
 import requests
 from flask import Flask, request
@@ -68,8 +66,10 @@ class SelectModel(Resource):
 
 class ListModels(Resource):
     def get(self):
-        path = config.MODELS_PATH
-        path = path.replace('_', '/')
+        data_source = g.data_source
+        data_source.get_from_json(request=request, requester=self.__class__.__name__)
+
+        path = config.MODELS_PATH.split('/').format(data_source.user)
         files = os.listdir(f'{path}/')
         files.sort(reverse=True)
         files_dict = {}

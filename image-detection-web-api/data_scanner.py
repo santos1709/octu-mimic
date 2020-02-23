@@ -27,6 +27,9 @@ class DataScanner:
             self.model_version = got_json['model_version']
             self.model_id = got_json['model_id']
 
+        elif requester == 'ListModels':
+            self.user = got_json['user']
+
         elif requester == 'Evaluate':
             self.user = got_json['user']
             self.pic = got_json['picture']
