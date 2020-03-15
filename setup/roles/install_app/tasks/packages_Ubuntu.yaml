@@ -20,7 +20,7 @@
   apt:
     name: "{{ gen_packages }}"
 
-- name: Installing postgresql
-  apt:
-    name: "{{ postgres_packages }}"
-
+# - name: Installing postgresql
+#   apt:
+#     name: "{{ postgres_packages }}"
+# 

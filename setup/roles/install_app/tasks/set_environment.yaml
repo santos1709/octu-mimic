@@ -15,10 +15,27 @@
     environment:
       WORKON_HOME: "{{ venv_dir }}"
 
+  - name: Ensuring .bashrc.d/ parser on .bashrc
+    blockinfile:
+      dest: "{{ ansible_env.HOME }}/.bashrc"
+      block: |
+        while read filename
+        do
+          source "$filename"
+        done < <(find -L ~/.bashrc.d -type f)
+      marker: '# {mark} ANSIBLE MANAGED BLOCK - .bashrc.d'
+      insertbefore: BOF
+      create: yes
+
+  - name: Assuring .bashrc.d dir
+    file:
+      path: "{{ ansible_env.HOME }}/.bashrc.d"
+      state: directory
+
   - name: Exporting workon_home env var
     template:
       src: etc/workon_init.j2
-      dest: "/etc/profile.d/workon_init.sh"
+      dest: "{{ ansible_env.HOME }}/.bashrc.d/workon_init.sh"
       owner: root
       group: root
       mode: '644'
@@ -69,40 +86,40 @@
       group: root
       mode: '664'
 
-- name: Setting DB
-  block:
-  - name: Getting initdb
-    find:
-      paths: /usr
-      patterns: 'initdb'
-      recurse: yes
-    register: initdb
-
-  - name: Setting postgresql home
-    set_fact: 
-      pg_bin_home: "{{ initdb['files'][-1]['path'].split('initdb')[0] }}"
-
-  - block:
-    - name: "Creating DB cluster on {{ db_dir }}"
-      shell: "{{ pg_bin_home }}initdb -D {{ db_dir }}"
-      become: true
-      become_user: postgres
-      register: initdb_response
-    rescue:
-      - debug:
-          msg: DB Already created and initialized
-        when: "'exists but is not empty' in initdb_response.stderr"
-
-  - block:
-    - name: Initializing postgresql DB service
-      shell: "{{ pg_bin_home }}pg_ctl start -o '-p {{ db_port }} -h {{ db_hostname }} -d {{ db_name }}' -l logfile"
-      become: true
-      become_user: postgres
-      environment:
-        PGDATA: "{{ db_dir }}"
-      register: psql_response
-    rescue:
-      - debug:
-          msg: DB Already started
-        when: "'another server might be running' in psql_response.stderr"
-
+# - name: Setting DB
+#   block:
+#   - name: Getting initdb
+#     find:
+#       paths: /usr
+#       patterns: 'initdb'
+#       recurse: yes
+#     register: initdb
+# 
+#   - name: Setting postgresql home
+#     set_fact: 
+#       pg_bin_home: "{{ initdb['files'][-1]['path'].split('initdb')[0] }}"
+# 
+#   - block:
+#     - name: "Creating DB cluster on {{ db_dir }}"
+#       shell: "{{ pg_bin_home }}initdb -D {{ db_dir }}"
+#       become: true
+#       become_user: postgres
+#       register: initdb_response
+#     rescue:
+#       - debug:
+#           msg: DB Already created and initialized
+#         when: "'exists but is not empty' in initdb_response.stderr"
+# 
+#   - block:
+#     - name: Initializing postgresql DB service
+#       shell: "{{ pg_bin_home }}pg_ctl start -o '-p {{ db_port }} -h {{ db_hostname }} -d {{ db_name }}' -l logfile"
+#       become: true
+#       become_user: postgres
+#       environment:
+#         PGDATA: "{{ db_dir }}"
+#       register: psql_response
+#     rescue:
+#       - debug:
+#           msg: DB Already started
+#         when: "'another server might be running' in psql_response.stderr"
+# 

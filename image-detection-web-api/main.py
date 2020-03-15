@@ -141,4 +141,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     with objects_set(app, DataSource(), Database(), Model()):
-        app.run(host=config.HOST, port=config.PORT)
+        app.run(host='0.0.0.0', port=config.PORT)

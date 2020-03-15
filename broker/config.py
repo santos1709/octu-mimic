@@ -7,15 +7,9 @@ TOPICS = ["outTopic/+/+/+/#"]
 # MQTT broker info
 USER = "mosquitto"
 PASS = ""
-HOST = "192.168.122.212"
-PORT = "1883"
-
-# MQTT test broker info
-# USER = 'bwoigzxu'
-# PASS = "NvYmeI7tN46L"
-# HOST = "m13.cloudmqtt.com"
-# PORT = "18869"
+HOST = "10.152.183.95"
+PORT = "6380"
 
 # Main webapp infos
-WEBAPP = "192.168.122.66:6379"
-PICS_PATH = f'{WORKING_DIR}/../image-detection-web-api/data'
+WEBAPP = "10.152.183.42:6379"
+PICS_PATH = f'{WORKING_DIR}/../app/data'

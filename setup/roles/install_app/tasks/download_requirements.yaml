@@ -10,7 +10,6 @@
     dest: "{{ tmp_dir }}/"
     mode: '0775'
   register: downloaded_py
-  when: server or ansible_facts['distribution'] == "Fedora"
 
 - name: "Downloading git"
   get_url:

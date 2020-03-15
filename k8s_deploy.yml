@@ -6,19 +6,24 @@ metadata:
     app: octu
     tier: backend
 spec:
+  clusterIP: 10.152.183.42 
   ports:
   - port: 6379
-    targetPort: 6379
+    targetPort: 8880
   selector:
     app: octu
     tier: backend
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: octu 
+      tier: backend
   template:
     metadata:
       labels:
@@ -27,13 +32,60 @@ spec:
     spec:
       containers:
       - name: main
-        image: octu  
+        image: octu:local
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 400m
             memory: 500Mi
         ports:
-        - containerPort: 6379
+        - containerPort: 8880
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app: db
+    tier: backend
+spec:
+  clusterIP: 10.152.183.95 
+  ports:
+  - port: 6381
+    targetPort: 5432
+  selector:
+    app: db
+    tier: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db 
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: db 
+        tier: backend
+    spec:
+      containers:
+      - name: main
+        image: postgres:latest
+        env:
+          - name: "POSTGRES_HOST_AUTH_METHOD"
+            value: "trust"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 5432
 ---
 apiVersion: v1
 kind: Service
@@ -49,12 +101,16 @@ spec:
     app: broker
     tier: backend
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: broker
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: broker 
+      tier: backend
   template:
     metadata:
       labels:
@@ -62,8 +118,9 @@ spec:
         tier: backend
     spec:
       containers:
-      - name: slave
+      - name: mosquitto 
         image: eclipse-mosquitto:latest
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 400m
@@ -71,14 +128,15 @@ spec:
         ports:
         - containerPort: 6380
 
-      - name: octu-mqtt
-        image: mimic
+      - name: mimic
+        image: mimic:local
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 100m
             memory: 200Mi
         ports:
-         - containerPort: 6381
+         - containerPort: 6382
 
        #env:
        # - name: GET_HOSTS_FROM
