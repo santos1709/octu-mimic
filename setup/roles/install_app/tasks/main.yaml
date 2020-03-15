@@ -7,9 +7,11 @@
 
 - name: Downloading requirements
   import_tasks: download_requirements.yaml
+  when: server or ansible_facts['distribution'] == "Fedora"
 
 - name: Building packages from sources
   import_tasks: build_sources.yaml
+  when: server or ansible_facts['distribution'] == "Fedora"
 
 - name: Setting Environment
   import_tasks: set_environment.yaml

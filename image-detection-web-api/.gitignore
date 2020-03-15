@@ -118,8 +118,8 @@ test/temp_data/
 # VS Code
 .vscode/
 
-# Environment configurations
-config.py
+# Bckp configurations
+*.bckp
 
 #keras testing
 keras-anomaly-detection/*
