@@ -26,6 +26,17 @@ class Model():
 
     @staticmethod
     def write_xml(img_path, objects, tl, br, savedir):
+        """
+        Creates a YOLO format xml annotation file based on a picture
+
+        Args:
+            img_path (str): targeted picture path
+            objects (list): list of name of different objects in the targeted pictures
+            tl (list): list containing top coordinates of the objects from objects list (following the index)
+            br (list): list containing bottom coordinates of the objects from objects list (following the index)
+            savedir (str): path to save the annotation
+        """
+
         if not os.path.isdir(savedir):
             os.mkdir(savedir)
 
@@ -62,16 +73,46 @@ class Model():
 
     @staticmethod
     def _date_range(start_date, end_date):
+        """
+        Iterator for each day of a given date range
+
+        Args:
+            start_date (datetime): first day of the desired range
+            end_date (datetime): last day of the desired range
+
+        Yields:
+            Individual days (datetime) of a date range
+        """
+
         for n in range(int((end_date - start_date).days)):
             yield start_date + timedelta(n)
 
     @staticmethod
     def get_most_recent_model(path):
+        """
+        Return the most recent (latest) model file in a given models path
+
+        Args:
+            path (str): models path
+
+        Returns:
+            str: latest model name
+        """
+
         files = glob.glob(os.path.join(path, '*'))
         files.sort(reverse=False)
         return files[0].split(path)[-1]
 
     def select_model(self, user, version=None, model_id=None):
+        """
+        Set a specific model to be used, setting it in the db models table
+
+        Args:
+            user (str): registered user which the model belongs
+            version (str): version of the desired model (if None, the class attribute is used)
+            model_id (str): id of the desired model (if None, the class attribute is used)
+        """
+
         db = Database()
 
         if not version:
@@ -97,6 +138,20 @@ class Model():
         self.get_model_info(user)
 
     def load_model(self, user, model_path=None, update_db=False):
+        """
+        Load a specific model and its parameters to be used
+
+        Args:
+            user (str): registered user which the model belongs
+            model_path (str): full path of the model file to be loaded (If None, model will be fetch according with
+                db models table)
+            update_db (bool):  True if the loaded model, according with the argument model_path, should update the
+                registered model in db models table
+
+        Returns:
+            object: loaded model
+        """
+
         if model_path:
             version = model_path.split('/')[-1].split('_')[0]
             model_id = model_path.split('_')[-1]
@@ -122,6 +177,16 @@ class Model():
         return model
 
     def get_model_info(self, user, model=None):
+        """
+        Update this class attribute (the model's info) according with a target model (either the db models table
+            - default - or a custom one)
+
+        Args:
+            user (str): registered user which the model belongs
+            model (str): target model name
+
+        """
+
         self.user = user
         if model:
             self.version = model.split('_')[0]
@@ -135,6 +200,14 @@ class Model():
         self.model_name = f'{self.version}_{self.model_id}'
 
     def generate_model_id(self, user):
+        """
+        Generate uid for a specific model and update it in the db models table
+
+        Args:
+            user (str): registered user which the model belongs
+
+        """
+
         db = Database()
         self.model_id = str(uuid4()).split('-')[0]
         db.update(
@@ -146,11 +219,32 @@ class Model():
         )
 
     def version_model(self, user):
+        """
+        Version the model, generating a timestamp a uid for it
+
+        Args:
+            user (str): registered user which the model belongs
+
+        """
         self.version = datetime.now().strftime("%Y-%m-%d-%h-%M-%S")
         self.generate_model_id(user)
         self.select_model(user=user)
 
     def train_model(self, data_dir, user, objs_array, model=None, new_model=False):
+        """
+        Train a specific model according with a set of data
+
+        Args:
+            data_dir (str): directory with the YOLO training data (pictures and annotations)
+            user (str): registered user which the model belongs
+            objs_array (list): list containing the names of unique objects to be trained for
+            model (str): full path of the model file to be loaded
+            new_model (bool): True if after training a new model file will be generated
+
+        Returns:
+            object: trained model
+        """
+
         if new_model:
             model_path = ''
         else:
@@ -175,6 +269,18 @@ class Model():
         return self.model
 
     def detect(self, user, pic_path, model=None):
+        """
+        Iterator for each day of a given date range
+
+        Args:
+            user (str): registered user which the model belongs
+            pic_path (str): path of the picture to be analyzed
+            model (str): full path of the model file to be loaded
+
+        Returns:
+            tuple: detection results (dict), reserved (str), list of unique objects found (list)
+        """
+
         path = Path('/' + os.path.join(*pic_path.split('/')[:-1]))
         path.mkdir(parents=True, exist_ok=True)
 

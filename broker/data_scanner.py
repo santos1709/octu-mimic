@@ -48,13 +48,35 @@ class DataScanner:
 
     @staticmethod
     def save_file(file_data, file_path):
+        """
+        Save some chunk of data in a file in disk, assuring its path if not yet created
+
+        Args:
+            file_data (bytearray): data to saved in a file
+            file_path (str): path where the file will be saved
+
+        Returns:
+            str: saved file path
+        """
+
         Path('/'.join(file_path.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
         with open(file_path, 'wb+') as f:
             f.write(file_data)
 
         return file_path
 
-    def save_picture(self, serialized_file, user, device_name):
+    def save_picture(self, picture, user, device_name):
+        """
+        Save a memory persisted picture in a file in disk, timestamping it
+
+        Args:
+            picture (bytearray): bytes array data of the image file
+            user (str): registered user
+            device_name (str): device name whereas the data came from
+
+        Returns:
+            str: saved picture path
+        """
         # uid = str(uuid4()).split('-')[0]
         timestamp = datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S')
 
@@ -63,8 +85,9 @@ class DataScanner:
         # self.save_file(serialized_file, file_path)
         #
         # deserialized_file = self.deserialize(file_path)
-        deserialized_file = serialized_file
+        # deserialized_file = picture
+        # self.save_file(deserialized_file, pic_path)
         pic_path = f'{file_path}.jpg'
-        self.save_file(deserialized_file, pic_path)
+        self.save_file(picture, pic_path)
 
         return pic_path

@@ -111,40 +111,8 @@ spec:
             memory: 500Mi
         ports:
           - containerPort: 3000
-#---
-## deployment/dbctl
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: dbctl
-#spec:
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      app: dbctl
-#      tier: backend
-#  template:
-#    metadata:
-#      labels:
-#        app: dbctl
-#        tier: backend
-#    spec:
-#      containers:
-#      - name: postgrest
-#        image: postgrest/postgrest:latest
-#        env:
-#          - name: "PGRST_DB_URI"
-#            value: "postgres://postgres@10.152.183.95:6381/postgres"
-#          - name: "PGRST_DB_ANON_ROLE"
-#            value: "postgres"
-#        imagePullPolicy: IfNotPresent
-#        resources:
-#          requests:
-#            cpu: 400m
-#            memory: 500Mi
-#        ports:
-#        - containerPort: 3000
-#
+
+
 ## Services
 #
 ---
@@ -213,5 +181,5 @@ spec:
   - port: 6382
     targetPort: 3000
   selector:
-    app: dbctl
+    app: db
     tier: backend

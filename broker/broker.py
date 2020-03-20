@@ -1,5 +1,3 @@
-import json
-
 import paho.mqtt.client as mqtt
 import requests
 
@@ -7,9 +5,18 @@ import config
 from data_scanner import DataScanner
 
 
-def save_data(image_serialized, user, device_name, operator):
+def save_data(image, user, device_name, operator):
+    """
+    Save the receive data and send a http request to the web server with the saved image information
+
+    Args:
+        image (bytearray): bytes array data object of the png image
+        user (str): registered user
+        device_name (str): name of the device whereas the data came from
+        operator (str): name of the operator that interacted with the device whereas data came from
+    """
     data = DataScanner()
-    img_path = data.save_picture(serialized_file=image_serialized, user=user, device_name=device_name)
+    img_path = data.save_picture(serialized_file=image, user=user, device_name=device_name)
 
     json_data = {
         "user": user,
@@ -18,30 +25,45 @@ def save_data(image_serialized, user, device_name, operator):
         "operator": operator
     }
 
-    requests.post(f"{config.WEBAPP}/data/send", data=json_data)
+    ret = requests.post(config.EVALUATE_ROUTE, data=json_data)
+    print(ret.content)
 
 
-# The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
+    """
+    The callback for when the client receives a CONNACK response from the server.
+    Subscribing in on_connect() means that if we lose the connection and
+    reconnect then subscriptions will be renewed.
 
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
+    Args:
+        client (object): the client instance for this callback
+        userdata (object): private user data as set in Client() or user_data_set()
+        flags (dict): response flags sent by the broker
+        rc (int): connection result
+    """
+    print(f"Connected with result code {rc}")
     for t in config.TOPICS:
         client.subscribe(t)
 
 
-# The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+    """
+    The callback for when a PUBLISH message is received from the server.
+
+    Args:
+        client (object): the client instance for this callback
+        userdata (object): private user data as set in Client() or user_data_set()
+        msg (object): message payload, an instance of MQTTMessage.
+            This is a class with members topic, payload, qos, retain.
+    """
     print(f'{msg.topic} {type(msg.payload)}')
-    # msg_dict = json.loads(msg.payload.decode().replace("'", '"'))
     topic_levels = msg.topic.split('/')
     user = topic_levels[1]
     device_name = topic_levels[2]
     operator = topic_levels[3]
     image = msg.payload
 
-    save_data(image_serialized=image, user=user, device_name=device_name, operator=operator)
+    save_data(image=image, user=user, device_name=device_name, operator=operator)
 
 
 if __name__ == "__main__":

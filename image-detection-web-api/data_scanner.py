@@ -1,6 +1,3 @@
-import config
-
-
 class DataScanner:
     def __init__(self):
         self.timestamp = ''
@@ -18,6 +15,14 @@ class DataScanner:
         self.got_json = None
 
     def get_from_json(self, request, requester):
+        """
+        Fills this call attributes according with a flask request json obj
+
+        Args:
+            request (object): Flask request obj
+            requester (str): Class name of the endpoint requester
+
+        """
         got_json = request.json
         if type(got_json) == list:
             got_json = request.json[0]
