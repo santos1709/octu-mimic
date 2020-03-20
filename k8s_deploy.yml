@@ -1,3 +1,154 @@
+## Deployments
+#
+---
+# deployment/app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: octu
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: octu
+        tier: backend
+    spec:
+      containers:
+      - name: main
+        image: octu:local
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 8880
+---
+# deployment/broker
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: broker
+        tier: backend
+    spec:
+      containers:
+      - name: mosquitto
+        image: eclipse-mosquitto:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 1883
+
+      - name: mimic
+        image: mimic:local
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        ports:
+         - containerPort: 6382
+---
+# deployment/db
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: db
+        tier: backend
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+          - name: "POSTGRES_HOST_AUTH_METHOD"
+            value: "trust"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+        - containerPort: 5432
+      - name: postgrest
+        image: postgrest/postgrest:latest
+        env:
+          - name: "PGRST_DB_URI"
+            value: "postgres://postgres@10.152.183.95:6381/postgres"
+          - name: "PGRST_DB_ANON_ROLE"
+            value: "postgres"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        ports:
+          - containerPort: 3000
+#---
+## deployment/dbctl
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: dbctl
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: dbctl
+#      tier: backend
+#  template:
+#    metadata:
+#      labels:
+#        app: dbctl
+#        tier: backend
+#    spec:
+#      containers:
+#      - name: postgrest
+#        image: postgrest/postgrest:latest
+#        env:
+#          - name: "PGRST_DB_URI"
+#            value: "postgres://postgres@10.152.183.95:6381/postgres"
+#          - name: "PGRST_DB_ANON_ROLE"
+#            value: "postgres"
+#        imagePullPolicy: IfNotPresent
+#        resources:
+#          requests:
+#            cpu: 400m
+#            memory: 500Mi
+#        ports:
+#        - containerPort: 3000
+#
+## Services
+#
+---
+# service/app
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,33 +165,24 @@ spec:
     app: octu
     tier: backend
 ---
-apiVersion: apps/v1
-kind: Deployment
+# service/broker
+apiVersion: v1
+kind: Service
 metadata:
-  name: app
+  name: broker
+  labels:
+    app: broker
+    tier: backend
 spec:
-  replicas: 1
+  clusterIP: 10.152.183.112
+  ports:
+  - port: 6380
+    targetPort: 1883
   selector:
-    matchLabels:
-      app: octu 
-      tier: backend
-  template:
-    metadata:
-      labels:
-        app: octu 
-        tier: backend
-    spec:
-      containers:
-      - name: main
-        image: octu:local
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 400m
-            memory: 500Mi
-        ports:
-        - containerPort: 8880
+    app: broker
+    tier: backend
 ---
+# service/db
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,93 +199,19 @@ spec:
     app: db
     tier: backend
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: db
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: db 
-      tier: backend
-  template:
-    metadata:
-      labels:
-        app: db 
-        tier: backend
-    spec:
-      containers:
-      - name: main
-        image: postgres:latest
-        env:
-          - name: "POSTGRES_HOST_AUTH_METHOD"
-            value: "trust"
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 400m
-            memory: 500Mi
-        ports:
-        - containerPort: 5432
----
+# service/dbctl
 apiVersion: v1
 kind: Service
 metadata:
-  name: broker
+  name: dbctl
   labels:
-    app: broker
+    app: db
     tier: backend
 spec:
+  clusterIP: 10.152.183.96
   ports:
-  - port: 6380
+  - port: 6382
+    targetPort: 3000
   selector:
-    app: broker
+    app: dbctl
     tier: backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: broker
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: broker 
-      tier: backend
-  template:
-    metadata:
-      labels:
-        app: broker
-        tier: backend
-    spec:
-      containers:
-      - name: mosquitto 
-        image: eclipse-mosquitto:latest
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 400m
-            memory: 500Mi
-        ports:
-        - containerPort: 6380
-
-      - name: mimic
-        image: mimic:local
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        ports:
-         - containerPort: 6382
-
-       #env:
-       # - name: GET_HOSTS_FROM
-       #   value: dns
-          # If your cluster config does not include a dns service, then to
-          # instead access an environment variable to find the master
-          # service's host, comment out the 'value: dns' line above, and
-          # uncomment the line below:
-          # value: env
-        
