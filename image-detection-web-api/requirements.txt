@@ -50,7 +50,7 @@ MarkupSafe==1.1.0
 matplotlib==3.0.3
 mock==2.0.0
 more-itertools==4.2.0
-numpy==1.16.2
+numpy==1.22.0
 openapi-spec-validator==0.2.4
 opencv-python==4.2.0.32
 paho-mqtt==1.4.0
