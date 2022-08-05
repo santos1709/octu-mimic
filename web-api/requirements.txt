@@ -65,7 +65,7 @@ psycopg2-binary>=2.7.4
 ptyprocess==0.6.0
 py==1.5.3
 py4j==0.10.7
-pyarrow==0.13.0
+pyarrow==0.15.1
 Pygments==2.3.0
 pyparsing==2.4.0
 pytest==4.4.1
